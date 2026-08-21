@@ -103,6 +103,7 @@
     a:focus-visible,
     .btn:focus-visible,
     .nav-toggle:focus-visible,
+    .contact-copy:focus-visible,
     .nav-links a:focus-visible {
       outline: 2px solid currentColor;
       outline-offset: 3px;
@@ -123,6 +124,19 @@
       transition: top 0.15s ease;
     }
     .skip-link:focus { top: 0.6rem; }
+
+    /* ── Scroll progress (a forest thread that fills as you read) ── */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left center;
+      z-index: 101;
+      will-change: transform;
+      pointer-events: none;
+    }
 
     /* ── Nav ── */
     nav {
@@ -153,6 +167,7 @@
       list-style: none;
     }
     .nav-links a {
+      position: relative;
       font-size: 12px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -161,6 +176,18 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--ink); }
+    /* "You are here": the current section's link carries a forest thread. */
+    .nav-links a.active { color: var(--ink); }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      bottom: -6px;
+      height: 2px;
+      background: var(--accent);
+    }
+    nav.nav--hero .nav-links a.active { color: var(--bg); }
+    nav.nav--hero .nav-links a.active::after { background: var(--accent-light); }
     /* Nav adapts over the dark hero; JS toggles .nav--hero. Default (JS off) stays legible paper. */
     nav.nav--hero {
       background: transparent;
@@ -223,6 +250,9 @@
       .nav-links li:first-child a { border-top: none; }
       nav.nav--hero .nav-links a:hover,
       .nav-links a:hover { color: var(--ink); }
+      /* Drawer rows already carry hairlines; drop the underline tick here. */
+      .nav-links a.active::after { display: none; }
+      .nav-links a.active { color: var(--ink); }
     }
 
     /* ── Hero (dark peak) ── */
@@ -660,6 +690,22 @@
       transition: border-color 0.2s;
     }
     .contact-links a:hover { border-color: var(--ink); }
+    /* Copy-email: a text control that matches the contact links exactly. */
+    .contact-copy {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--rule);
+      padding: 0 0 2px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-copy:hover { border-color: var(--ink); }
+    .contact-copy.copied { color: var(--accent); border-color: var(--accent); }
 
     /* ── Footer ── */
     footer { padding: 2rem 0; border-top: 1px solid var(--rule); }
@@ -741,6 +787,8 @@
 <body>
 
   <a class="skip-link" href="#about">Skip to content</a>
+
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
   <nav>
     <div class="container">
@@ -1064,6 +1112,7 @@
       </p>
       <div class="contact-links">
         <a href="mailto:aayus.pok@gmail.com">Email</a>
+        <button class="contact-copy" type="button" data-email="aayus.pok@gmail.com" data-label="Copy address">Copy address</button>
         <a href="https://www.linkedin.com/in/aayush-pokhrel-dev/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="https://github.com/aayushpokhrel1" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
@@ -1136,17 +1185,28 @@
       const lightboxClose = lightbox.querySelector('.lightbox-close');
       const lightboxPlaceholder = lightboxImg.src;
       let lastFocused = null;
+      // Use the View Transitions API for a smooth crossfade where supported;
+      // fall back to the plain class toggle otherwise or when motion is reduced.
+      const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const withVT = (fn) => {
+        if (document.startViewTransition && !reducedMotion()) document.startViewTransition(fn);
+        else fn();
+      };
       const openLightbox = (src, alt) => {
+        lastFocused = document.activeElement;
         lightboxImg.src = src;
         lightboxImg.alt = alt || '';
-        lightbox.classList.add('open');
-        lightbox.setAttribute('aria-hidden', 'false');
-        lastFocused = document.activeElement;
-        lightboxClose.focus();
+        withVT(() => {
+          lightbox.classList.add('open');
+          lightbox.setAttribute('aria-hidden', 'false');
+        });
+        requestAnimationFrame(() => lightboxClose.focus());
       };
       const closeLightbox = () => {
-        lightbox.classList.remove('open');
-        lightbox.setAttribute('aria-hidden', 'true');
+        withVT(() => {
+          lightbox.classList.remove('open');
+          lightbox.setAttribute('aria-hidden', 'true');
+        });
         lightboxImg.src = lightboxPlaceholder;
         if (lastFocused) lastFocused.focus();
       };
@@ -1163,10 +1223,72 @@
         if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
       });
     }
+
+    // Reading progress: fill the top forest thread as the page scrolls.
+    const progress = document.getElementById('scrollProgress');
+    if (progress) {
+      let ticking = false;
+      const updateProgress = () => {
+        const h = document.documentElement;
+        const max = h.scrollHeight - h.clientHeight;
+        progress.style.transform = 'scaleX(' + (max > 0 ? h.scrollTop / max : 0) + ')';
+        ticking = false;
+      };
+      updateProgress();
+      addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(updateProgress); ticking = true; }
+      }, { passive: true });
+      addEventListener('resize', updateProgress, { passive: true });
+    }
+
+    // Active-section nav: mark the link for whichever section holds the middle band.
+    const navMap = {};
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(a => {
+      navMap[a.getAttribute('href').slice(1)] = a;
+    });
+    const spySections = document.querySelectorAll('section[id]');
+    if ('IntersectionObserver' in window && spySections.length) {
+      const spy = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          const link = navMap[e.target.id];
+          if (!link || !e.isIntersecting) return;
+          Object.values(navMap).forEach(l => { l.classList.remove('active'); l.removeAttribute('aria-current'); });
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'true');
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+      spySections.forEach(s => spy.observe(s));
+    }
+
+    // Copy email to the clipboard with a quiet, self-reverting confirmation.
+    document.querySelectorAll('.contact-copy').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const email = btn.dataset.email;
+        try {
+          await navigator.clipboard.writeText(email);
+        } catch (_) {
+          const ta = document.createElement('textarea');
+          ta.value = email;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+        btn.classList.add('copied');
+        btn.textContent = 'Copied';
+        clearTimeout(btn._revert);
+        btn._revert = setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.textContent = btn.dataset.label;
+        }, 1600);
+      });
+    });
   </script>
 
-  <!-- Cloudflare Web Analytics (privacy-first, cookieless) for aayushpokhrel1.github.io -->
-  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "02d3c2ef2e46458dbb8a813c21064f73"}'></script>
+  <!-- Umami Analytics (privacy-first, cookieless) for aayushpokhrel1.github.io -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="9f197a0c-7d25-4559-93ac-2104de43bb57"></script>
 
 </body>
 </html>
