@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aayush Pokhrel CS & AI</title>
+  <title>Aayush Pokhrel · CS & AI</title>
+  <meta name="description" content="Aayush Pokhrel is a Computer Science graduate (University of Cincinnati, 2026) working in machine learning, autonomous systems, and data engineering. Open to full-time ML, data, and software roles."/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,6 +14,7 @@
       --ink: #1a1814;
       --muted: #7a7570;
       --accent: #2a5c45;
+      --accent-light: #7cc4a0;
       --rule: #ddd9d2;
       --mono: 'DM Mono', monospace;
       --serif: 'DM Serif Display', Georgia, serif;
@@ -28,6 +30,7 @@
       font-size: 15px;
       line-height: 1.7;
       -webkit-font-smoothing: antialiased;
+      overflow-wrap: break-word;
     }
 
     .container {
@@ -35,6 +38,30 @@
       margin: 0 auto;
       padding: 0 2rem;
     }
+
+    /* ── Accessibility ── */
+    a:focus-visible,
+    .btn:focus-visible,
+    .nav-links a:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 3px;
+    }
+    .skip-link {
+      position: absolute;
+      left: 0.75rem;
+      top: -3.5rem;
+      z-index: 200;
+      background: var(--ink);
+      color: var(--bg);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.55rem 0.9rem;
+      text-decoration: none;
+      transition: top 0.15s ease;
+    }
+    .skip-link:focus { top: 0.6rem; }
 
     /* ── Nav ── */
     nav {
@@ -73,36 +100,51 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--ink); }
+    /* Nav adapts over the dark hero; JS toggles .nav--hero. Default (JS off) stays legible paper. */
+    nav.nav--hero {
+      background: transparent;
+      backdrop-filter: none;
+      border-bottom-color: transparent;
+    }
+    nav.nav--hero .nav-logo { color: var(--bg); }
+    nav.nav--hero .nav-links a { color: rgba(247,245,240,0.65); }
+    nav.nav--hero .nav-links a:hover { color: var(--bg); }
 
-    /* ── Hero ── */
+    /* ── Hero (dark peak) ── */
     #hero {
-      padding: 140px 0 80px;
-      border-bottom: 1px solid var(--rule);
+      background: var(--ink);
+      color: var(--bg);
+      padding: 168px 0 108px;
     }
     .tag {
       display: inline-block;
       font-size: 11px;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
+      color: var(--accent-light);
+      margin-bottom: 1.8rem;
     }
     h1 {
       font-family: var(--serif);
-      font-size: clamp(2.8rem, 6vw, 4.2rem);
+      font-size: clamp(3.1rem, 9vw, 5.8rem);
       font-weight: 400;
-      line-height: 1.1;
-      letter-spacing: -0.01em;
-      margin-bottom: 1.5rem;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.8rem;
     }
-    h1 em { font-style: italic; color: var(--accent); }
+    h1 em { font-style: italic; color: var(--accent-light); }
     .hero-sub {
       font-size: 15px;
-      color: var(--muted);
+      color: rgba(247,245,240,0.72);
       max-width: 480px;
       line-height: 1.8;
       margin-bottom: 2.5rem;
     }
+    /* Buttons invert on the dark hero surface */
+    #hero .btn { border-color: var(--bg); color: var(--bg); }
+    #hero .btn:hover { background: var(--bg); color: var(--ink); }
+    #hero .btn-ghost { border-color: rgba(247,245,240,0.28); color: rgba(247,245,240,0.72); }
+    #hero .btn-ghost:hover { border-color: var(--bg); background: transparent; color: var(--bg); }
     .hero-cta {
       display: flex;
       gap: 1.2rem;
@@ -131,11 +173,23 @@
       border-bottom: 1px solid var(--rule);
     }
     .section-label {
-      font-size: 11px;
-      letter-spacing: 0.18em;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--ink);
       margin-bottom: 3rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 1.8rem;
+      height: 2px;
+      background: var(--accent);
+      flex: none;
     }
     h2 {
       font-family: var(--serif);
@@ -216,10 +270,13 @@
       margin-bottom: 0.3rem;
     }
     .exp-bullets li::before {
-      content: '—';
+      content: '';
       position: absolute;
       left: 0;
-      color: var(--rule);
+      top: 0.72em;
+      width: 0.55rem;
+      height: 1px;
+      background: var(--rule);
     }
 
     /* ── Projects ── */
@@ -254,9 +311,101 @@
       border: 1px solid rgba(42,92,69,0.3);
       padding: 0.2rem 0.6rem;
     }
+    .project-links {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      align-items: baseline;
+      margin-top: 0.9rem;
+    }
+    .project-links a {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+    .project-links a:hover { border-color: var(--ink); }
+    .project-note {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .project-gallery {
+      margin: 0.2rem 0 1.3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+    @media (max-width: 580px) { .project-gallery { grid-template-columns: 1fr; } }
+    .project-shot {
+      border: 1px solid var(--rule);
+      background: #ffffff;
+      padding: 0.4rem;
+      margin: 0;
+    }
+    .project-shot img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      height: auto;
+      object-fit: cover;
+      object-position: top;
+      background: var(--rule);
+    }
+    .project-shot figcaption {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.5rem 0.1rem 0.05rem;
+      line-height: 1.4;
+    }
+    /* ── Also (secondary work) ── */
+    .also {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+    }
+    .also-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+    .also-item {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 0 1.5rem;
+      align-items: baseline;
+    }
+    .also-title {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+    }
+    .also-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.75;
+      margin: 0.25rem 0 0.7rem;
+    }
+    .also-num { font-size: 11px; color: var(--muted); }
 
     /* ── Contact ── */
     #contact { border-bottom: none; }
+    .contact-headline {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 0.6rem;
+    }
     .contact-intro { color: var(--muted); max-width: 480px; margin-bottom: 2rem; }
     .contact-links { display: flex; gap: 2rem; flex-wrap: wrap; }
     .contact-links a {
@@ -277,25 +426,42 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
       font-size: 11px;
       color: var(--muted);
       letter-spacing: 0.05em;
     }
+    .footer-link {
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 1px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .footer-link:hover { color: var(--ink); border-color: var(--ink); }
 
-    /* ── Fade-in ── */
-    .fade-in {
+    /* ── Fade-in (progressive enhancement: content only hides once JS is present) ── */
+    .js .fade-in {
       opacity: 0;
       transform: translateY(18px);
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
-    .fade-in.visible { opacity: 1; transform: none; }
+    .js .fade-in.visible { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .js .fade-in { opacity: 1; transform: none; transition: none; }
+    }
   </style>
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
+  <a class="skip-link" href="#about">Skip to content</a>
+
   <nav>
     <div class="container">
-      <a class="nav-logo" href="#">AP</a>
+      <a class="nav-logo" href="#hero" aria-label="Aayush Pokhrel, home">AP</a>
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
@@ -307,12 +473,12 @@
 
   <section id="hero">
     <div class="container">
-      <span class="tag">Open to opportunities · Graduated May 2026</span>
-      <h1>Aayush<br>Pokhrel —<br><em>CS & AI.</em></h1>
+      <span class="tag">Open to opportunities · Graduated April 2026</span>
+      <h1>Aayush<br>Pokhrel:<br><em>CS & AI.</em></h1>
       <p class="hero-sub">
-        Computer Science student at the University of Cincinnati with hands-on experience
-        in machine learning, autonomous systems, and data engineering.
-        I build things that are rigorous, practical, and impactful.
+        Computer Science graduate from the University of Cincinnati with hands-on experience
+        in machine learning, backend engineering, and full-stack data applications.
+        I build and ship multi-service ML and data products end to end.
       </p>
       <div class="hero-cta">
         <a class="btn" href="#work">View my projects</a>
@@ -323,11 +489,11 @@
 
   <section id="about">
     <div class="container fade-in">
-      <p class="section-label">About</p>
+      <h2 class="section-label">About</h2>
       <div class="about-grid">
         <div class="about-text">
           <p>
-            I'm a senior CS student at the University of Cincinnati, graduated May 2026.
+            I'm a Computer Science graduate from the University of Cincinnati, class of April 2026.
             My work spans machine learning, autonomous systems, and data analytics,
             from quantum computing research to real-time sports dashboards.
           </p>
@@ -341,22 +507,23 @@
           <div class="skills-group">
             <p class="skills-group-label">Languages</p>
             <ul class="skills-list">
-              <li>Python</li><li>C++</li><li>C#</li><li>Java</li>
-              <li>SQL</li><li>JavaScript</li><li>MATLAB</li><li>LabVIEW</li>
+              <li>Python</li><li>SQL</li><li>TypeScript</li><li>JavaScript</li>
+              <li>C++</li><li>C#</li><li>Java</li><li>MATLAB</li>
             </ul>
           </div>
           <div class="skills-group">
-            <p class="skills-group-label">ML & Data</p>
+            <p class="skills-group-label">Frameworks & ML</p>
             <ul class="skills-list">
-              <li>TensorFlow</li><li>PyTorch</li><li>Scikit-learn</li>
-              <li>PostgreSQL</li><li>Power BI</li><li>Tableau</li>
+              <li>FastAPI</li><li>Node.js</li><li>React</li><li>Next.js</li>
+              <li>React Native</li><li>TensorFlow</li><li>PyTorch</li>
+              <li>XGBoost</li><li>NumPy</li><li>SciPy</li>
             </ul>
           </div>
           <div class="skills-group">
-            <p class="skills-group-label">Tools</p>
+            <p class="skills-group-label">Data & DevOps</p>
             <ul class="skills-list">
-              <li>React.js</li><li>Node.js</li><li>Simulink</li>
-              <li>Wireshark</li><li>Linux</li><li>Adobe CC</li>
+              <li>PostgreSQL</li><li>Docker</li><li>GitHub Actions</li>
+              <li>REST APIs</li><li>Power BI</li><li>Tableau</li><li>Wireshark</li>
             </ul>
           </div>
         </div>
@@ -366,31 +533,31 @@
 
   <section id="experience">
     <div class="container fade-in">
-      <p class="section-label">Experience</p>
+      <h2 class="section-label">Experience</h2>
 
       <div class="exp">
         <div class="exp-header">
           <span class="exp-title">Autonomous Systems Research Intern</span>
-          <span class="exp-date">Jan 2025 – Aug 2025</span>
+          <span class="exp-date">Jan 2025 to Aug 2025</span>
         </div>
         <p class="exp-company">University of Dayton Research Institute</p>
         <ul class="exp-bullets">
-          <li>Developed ML algorithms and control systems software in MATLAB/Simulink, Python, and Visual C++ to enhance autonomous systems performance.</li>
-          <li>Performed analysis, modeling, simulation, and testing of autonomous vehicles and dynamic systems for real-world applications.</li>
-          <li>Contributed to research in quantum algorithms and quantum computing applied to ML and control system challenges.</li>
+          <li>Researched DNA structure as a candidate for quantum computing architectures, solving the Schrödinger equation in Python (NumPy/SciPy, QuTiP, Qiskit) to quantify information storage and transfer versus silicon systems.</li>
+          <li>Cut simulation runtime ~90% (~48h to ~5h) across 100+ runs via numerical vectorization, an improved integration method, GPU acceleration, and parallelization.</li>
+          <li>Built PyTorch surrogate models to approximate and optimize the quantum simulation dynamics, and applied MATLAB/Simulink to the modeling, simulation, and testing of autonomous vehicles and control systems.</li>
         </ul>
       </div>
 
       <div class="exp">
         <div class="exp-header">
           <span class="exp-title">Project Management Co-op</span>
-          <span class="exp-date">Aug 2023 – Dec 2023</span>
+          <span class="exp-date">Aug 2023 to Dec 2023</span>
         </div>
         <p class="exp-company">EMCOR Facilities Services</p>
         <ul class="exp-bullets">
-          <li>Built and maintained Power BI and Tableau dashboards from Smartsheet data to visualize KPIs and support data-driven decisions.</li>
-          <li>Managed documentation and reporting for 120+ active projects, tracking timelines, deliverables, and stakeholder issues.</li>
-          <li>Collaborated across teams supporting the full project lifecycle from proposal development to close-out.</li>
+          <li>Built and maintained Power BI and Tableau dashboards from Smartsheet data to visualize KPIs, monitor project performance, and support data-driven decisions.</li>
+          <li>Managed documentation and reporting for 120+ active projects, tracking timelines, deliverables, and issues across stakeholders.</li>
+          <li>Collaborated with cross-functional teams across the full project lifecycle, from proposal development to project close-out.</li>
         </ul>
       </div>
 
@@ -399,20 +566,36 @@
 
   <section id="work">
     <div class="container fade-in">
-      <p class="section-label">Selected Projects</p>
+      <h2 class="section-label">Selected Projects</h2>
 
       <div class="project">
         <span class="project-num">01</span>
         <div>
           <h3 class="project-title">AI Inventory Management System</h3>
+          <div class="project-gallery">
+            <figure class="project-shot">
+              <img src="assets/01-Inventory_Dashboard.png" alt="Warehouse inventory operations dashboard showing total items and units, top items by quantity, weekly activity, category distribution, and a low-stock table." loading="lazy" decoding="async"/>
+              <figcaption>Operations console, inventory overview</figcaption>
+            </figure>
+            <figure class="project-shot">
+              <img src="assets/01-Simulation.png" alt="Gazebo warehouse simulation alongside a live object-detection feed and ROS2 navigation logs routing a robot between aisles." loading="lazy" decoding="async"/>
+              <figcaption>Warehouse simulation, live detection</figcaption>
+            </figure>
+          </div>
           <p class="project-desc">
-            An AI-powered inventory system using deep learning-based image recognition for
-            automated stock tracking. Built a React.js dashboard with real-time alerts and
-            a Node.js + PostgreSQL backend.
+            Real-time item tracking built by integrating a TensorFlow image-recognition
+            model with a Node.js REST API and a PostgreSQL schema with user auth. I built
+            the model integration layer, ran system-wide integration and performance
+            testing, and modeled item flow through the recognition pipeline in a real-time
+            warehouse simulation to measure tracking accuracy and latency at scale.
           </p>
           <div class="project-tags">
-            <span>Python</span><span>TensorFlow</span><span>PyTorch</span>
-            <span>React.js</span><span>PostgreSQL</span><span>Node.js</span>
+            <span>Python</span><span>TensorFlow</span><span>Computer Vision</span>
+            <span>Node.js</span><span>PostgreSQL</span><span>REST APIs</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/sabaldahal/Senior-Design" target="_blank" rel="noopener noreferrer">View code</a>
+            <span class="project-note">Team project</span>
           </div>
         </div>
       </div>
@@ -420,14 +603,31 @@
       <div class="project">
         <span class="project-num">02</span>
         <div>
-          <h3 class="project-title">Basketball Analytics Dashboard</h3>
+          <h3 class="project-title">Playstat: Sports Analytics Dashboard</h3>
+          <div class="project-gallery">
+            <figure class="project-shot">
+              <img src="assets/02-ParlayBuilder.png" alt="Playstat parlay builder listing tonight's low-risk parlays with model hit probabilities and payout multipliers for each card." loading="lazy" decoding="async"/>
+              <figcaption>Parlay builder, tonight's slate</figcaption>
+            </figure>
+            <figure class="project-shot">
+              <img src="assets/02-DataAnalytics.png" alt="Playstat model backtest table showing record, unit profit, and ROI broken down by bet segment and multiplier, with paper line-movement stats." loading="lazy" decoding="async"/>
+              <figcaption>Model backtest, ROI by segment</figcaption>
+            </figure>
+          </div>
           <p class="project-desc">
-            Real-time analytics dashboard pulling live player and team data from API-Basketball.
-            Stores metrics in PostgreSQL and surfaces player comparisons, league trends,
-            and predictive analytics via Tableau.
+            A FastAPI and PostgreSQL backend with a Next.js dashboard, ingesting ~1M stat
+            rows across 6 leagues from 4 external APIs via 3 scheduled daily jobs. I built
+            an XGBoost model with negative-binomial distributions and conformal calibration
+            (retired after backtesting underperformed market baselines, now rebuilding on
+            better data) and a combinatorial optimizer that ranks outcomes by de-vigged
+            joint probability, backed by a 98-test pytest suite and GitHub Actions CI.
           </p>
           <div class="project-tags">
-            <span>Python</span><span>PostgreSQL</span><span>Tableau</span><span>REST APIs</span>
+            <span>Python</span><span>FastAPI</span><span>PostgreSQL</span>
+            <span>Next.js</span><span>XGBoost</span><span>CI/CD</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/aayushpokhrel1/Playstat" target="_blank" rel="noopener noreferrer">View code</a>
           </div>
         </div>
       </div>
@@ -435,14 +635,50 @@
       <div class="project">
         <span class="project-num">03</span>
         <div>
-          <h3 class="project-title">Stock Price Prediction — LSTM</h3>
+          <h3 class="project-title">Budgerr</h3>
+          <div class="project-gallery">
+            <figure class="project-shot">
+              <img src="assets/04-WebDashboard.png" alt="Budgerr web dashboard showing monthly betting and category budgets with progress bars and a list of recent logged bets." loading="lazy" decoding="async"/>
+              <figcaption>Web dashboard, monthly budgets</figcaption>
+            </figure>
+            <figure class="project-shot">
+              <img src="assets/04-MobileDashboard.png" alt="Budgerr mobile budget view with net bet profit, bank cash flow, and recurring-charge summaries above a bottom tab bar for Budget, Tonight, Accounts, Transactions, and Analytics." loading="lazy" decoding="async"/>
+              <figcaption>React Native mobile client</figcaption>
+            </figure>
+          </div>
           <p class="project-desc">
-            LSTM neural network forecasting Apple Inc. closing prices from 10+ years of
-            historical data. Applied MinMaxScaler for feature scaling, evaluated via RMSE,
-            and visualized actual vs. predicted performance.
+            A full-stack budgeting app with a FastAPI and PostgreSQL backend serving
+            React Native (Expo) mobile and Next.js / TypeScript web clients, using the
+            Plaid API for automated transaction sync. It runs an envelope-budgeting engine
+            with category limits, threshold alerts, and trend analysis, plus recurring-charge
+            and price-hike detection via custom clustering. Deployed with Docker Compose,
+            API-key auth, encrypted nightly backups, and GitHub Actions CI across three
+            repos (~78 tests).
           </p>
           <div class="project-tags">
-            <span>Python</span><span>LSTM</span><span>Scikit-learn</span><span>yfinance</span>
+            <span>Python</span><span>FastAPI</span><span>PostgreSQL</span>
+            <span>React Native</span><span>Next.js</span><span>Plaid</span><span>Docker</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/aayushpokhrel1/Budgerr" target="_blank" rel="noopener noreferrer">View code</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="also">
+        <p class="also-label">Also</p>
+        <div class="also-item">
+          <span class="also-num">04</span>
+          <div>
+            <h3 class="also-title">Stock Price Prediction (LSTM)</h3>
+            <p class="also-desc">
+              An LSTM network forecasting Apple closing prices from 10+ years of historical
+              data, with MinMaxScaler feature scaling, RMSE evaluation, and actual-versus-predicted
+              visualization.
+            </p>
+            <div class="project-tags">
+              <span>Python</span><span>LSTM</span><span>Scikit-learn</span><span>yfinance</span>
+            </div>
           </div>
         </div>
       </div>
@@ -452,37 +688,53 @@
 
   <section id="contact">
     <div class="container fade-in">
-      <p class="section-label">Contact</p>
-      <h2>Let's connect.</h2>
+      <h2 class="section-label">Contact</h2>
+      <p class="contact-headline">Let's connect.</p>
       <p class="contact-intro">
-        Actively looking for full-time roles starting Spring 2026 in ML, data engineering,
-        or software development. Best way to reach me is by email.
+        Actively looking for full-time roles in ML, data engineering, or software
+        development, and available to start immediately. Best way to reach me is by email.
       </p>
       <div class="contact-links">
-        <a href="mailto:pokhreah@mail.uc.edu">Email</a>
-        <a href="https://www.linkedin.com/in/aayush-pokhrel-4ab156200/" target="_blank">LinkedIn</a>
-        <a href="https://github.com/" target="_blank">GitHub</a>
+        <a href="mailto:aayus.pok@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/aayush-pokhrel-dev/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/aayushpokhrel1" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <span>© 2026 Aayush Pokhrel</span>
-      <span>Cincinnati, OH</span>
+      <span>© 2026 Aayush Pokhrel · Cincinnati, OH</span>
+      <a class="footer-link" href="#hero">Back to top</a>
     </div>
   </footer>
 
   <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    const fadeEls = document.querySelectorAll('.fade-in');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      fadeEls.forEach(el => observer.observe(el));
+
+      // Nav goes transparent while the dark hero is in view, solid paper after.
+      const nav = document.querySelector('nav');
+      const hero = document.getElementById('hero');
+      if (nav && hero) {
+        const navObserver = new IntersectionObserver(([entry]) => {
+          nav.classList.toggle('nav--hero', entry.isIntersecting);
+        }, { rootMargin: '-52px 0px 0px 0px', threshold: 0 });
+        navObserver.observe(hero);
+      }
+    } else {
+      // Older engines: reveal everything so nothing stays hidden.
+      fadeEls.forEach(el => el.classList.add('visible'));
+    }
   </script>
 
 </body>
