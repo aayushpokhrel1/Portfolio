@@ -12,7 +12,7 @@
     :root {
       --bg: #f7f5f0;
       --ink: #1a1814;
-      --muted: #7a7570;
+      --muted: #726d67;
       --accent: #2a5c45;
       --accent-light: #7cc4a0;
       --rule: #ddd9d2;
@@ -582,15 +582,55 @@
     /* ── Fade-in (progressive enhancement: content only hides once JS is present) ── */
     .js .fade-in {
       opacity: 0;
-      transform: translateY(18px);
+      transform: translateY(14px);
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
     .js .fade-in.visible { opacity: 1; transform: none; }
+
+    /* Supporting: each section's forest rule draws left-to-right as the entry scrolls in. */
+    .js .section-label::before {
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+    }
+    .js .fade-in.visible .section-label::before { transform: scaleX(1); }
+
+    /* Focal moment: the hero inks itself in, line by line, once on load. */
+    @keyframes ink-in {
+      from { opacity: 0; transform: translateY(0.4em); filter: blur(7px); }
+      to   { opacity: 1; transform: none; filter: blur(0); }
+    }
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .js #hero .hl { display: inline-block; opacity: 0; animation: ink-in 0.72s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    .js #hero h1 span:nth-of-type(1) { animation-delay: 0.05s; }
+    .js #hero h1 span:nth-of-type(2) { animation-delay: 0.14s; }
+    .js #hero h1 em.hl { animation-delay: 0.23s; }
+    .js #hero .hero-sub  { opacity: 0; animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both; }
+    .js #hero .hero-cta  { opacity: 0; animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both; }
+    .js #hero .hero-spec { opacity: 0; animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.54s both; }
+
+    /* Supporting: lightbox image arrives with a soft focus-in, not a hard cut. */
+    .lightbox img {
+      opacity: 0;
+      transform: scale(0.985);
+      transition: opacity 0.28s ease, transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lightbox.open img { opacity: 1; transform: none; }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .js .fade-in { opacity: 1; transform: none; transition: none; }
       .project-shot .shot-link img { transition: none; }
       .project-shot:hover .shot-link img { transform: none; }
+      .js .section-label::before { transform: scaleX(1); transition: none; }
+      .js #hero .hl,
+      .js #hero .hero-sub,
+      .js #hero .hero-cta,
+      .js #hero .hero-spec { opacity: 1; transform: none; filter: none; animation: none; }
+      .lightbox img { opacity: 1; transform: none; transition: opacity 0.2s ease; }
     }
   </style>
   <script>document.documentElement.classList.add('js');</script>
@@ -614,7 +654,7 @@
 
   <section id="hero">
     <div class="container">
-      <h1>Aayush<br>Pokhrel:<br><em>CS & AI.</em></h1>
+      <h1><span class="hl">Aayush</span><br><span class="hl">Pokhrel:</span><br><em class="hl">CS & AI.</em></h1>
       <p class="hero-sub">
         Computer Science graduate from the University of Cincinnati with hands-on experience
         in machine learning, backend engineering, and full-stack data applications.
