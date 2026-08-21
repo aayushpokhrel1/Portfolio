@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Aayush Pokhrel · CS & AI</title>
   <meta name="description" content="Aayush Pokhrel is a Computer Science graduate (University of Cincinnati, 2026) working in machine learning, autonomous systems, and data engineering. Open to full-time ML, data, and software roles."/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -36,12 +36,17 @@
     .container {
       max-width: 720px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding-inline: max(2rem, env(safe-area-inset-left)) max(2rem, env(safe-area-inset-right));
     }
+
+    /* Browser surfaces themed from the palette, not left at engine defaults. */
+    ::selection { background: var(--accent); color: var(--bg); }
+    html { caret-color: var(--accent); }
 
     /* ── Accessibility ── */
     a:focus-visible,
     .btn:focus-visible,
+    .nav-toggle:focus-visible,
     .nav-links a:focus-visible {
       outline: 2px solid currentColor;
       outline-offset: 3px;
@@ -110,29 +115,104 @@
     nav.nav--hero .nav-links a { color: rgba(247,245,240,0.65); }
     nav.nav--hero .nav-links a:hover { color: var(--bg); }
 
+    /* Menu toggle: hidden on pointer-comfortable widths, shown as the mobile control. */
+    .nav-toggle {
+      display: none;
+      align-items: center;
+      min-height: 44px;
+      padding: 0.35rem 0.85rem;
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid var(--rule);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav-toggle:hover { color: var(--ink); border-color: var(--ink); }
+    nav.nav--hero .nav-toggle { color: var(--bg); border-color: rgba(247,245,240,0.4); }
+    nav.nav--hero .nav-toggle:hover { border-color: var(--bg); }
+
+    @media (max-width: 600px) {
+      .nav-toggle { display: inline-flex; }
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        padding: 0.4rem 0 0.6rem;
+        background: rgba(247,245,240,0.97);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--rule);
+        display: none;
+      }
+      nav.menu-open .nav-links { display: flex; }
+      .nav-links li { width: 100%; }
+      /* Drawer sits on paper regardless of hero state, so links keep paper-surface colors. */
+      nav.nav--hero .nav-links a,
+      .nav-links a {
+        display: flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 0 max(2rem, env(safe-area-inset-left));
+        font-size: 13px;
+        color: var(--muted);
+        border-top: 1px solid var(--rule);
+      }
+      .nav-links li:first-child a { border-top: none; }
+      nav.nav--hero .nav-links a:hover,
+      .nav-links a:hover { color: var(--ink); }
+    }
+
     /* ── Hero (dark peak) ── */
     #hero {
       background: var(--ink);
       color: var(--bg);
       padding: 168px 0 108px;
     }
-    .tag {
-      display: inline-block;
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--accent-light);
-      margin-bottom: 1.8rem;
-    }
+    @media (max-width: 580px) { #hero { padding: 116px 0 68px; } }
     h1 {
       font-family: var(--serif);
-      font-size: clamp(3.1rem, 9vw, 5.8rem);
+      font-size: clamp(3.4rem, 12vw, 6rem);
       font-weight: 400;
-      line-height: 1.02;
-      letter-spacing: -0.02em;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
       margin-bottom: 1.8rem;
     }
     h1 em { font-style: italic; color: var(--accent-light); }
+    /* Field-notebook spec strip: the hero's grounding index card. */
+    .hero-spec {
+      margin-top: 3.2rem;
+      padding-top: 1.7rem;
+      border-top: 1px solid rgba(247,245,240,0.18);
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      justify-content: start;
+      gap: 1.5rem 2.8rem;
+    }
+    .hero-spec > div { display: flex; flex-direction: column; gap: 0.4rem; }
+    .hero-spec dt {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+    }
+    .hero-spec dd {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      letter-spacing: 0.02em;
+      color: rgba(247,245,240,0.82);
+    }
+    @media (max-width: 580px) {
+      .hero-spec { grid-template-columns: 1fr 1fr; gap: 1.3rem 1.5rem; margin-top: 2.6rem; }
+    }
     .hero-sub {
       font-size: 15px;
       color: rgba(247,245,240,0.72);
@@ -369,12 +449,22 @@
       display: block;
       cursor: zoom-in;
       position: relative;
+      overflow: hidden;
     }
     .project-shot { transition: border-color 0.2s; }
     .project-shot:hover { border-color: var(--muted); }
     .project-shot .shot-link:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
+    }
+    /* Tactile zoom cue on hover-capable pointers only. */
+    @media (hover: hover) {
+      .project-shot .shot-link img { transition: transform 0.45s ease; }
+      .project-shot:hover .shot-link img { transform: scale(1.035); }
+    }
+    /* Let the work breathe past the reading column on wide screens (editorial figure bleed). */
+    @media (min-width: 980px) {
+      .project-gallery { margin-right: -6.5rem; }
     }
     /* Click-to-enlarge lightbox */
     .lightbox {
@@ -499,6 +589,8 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .js .fade-in { opacity: 1; transform: none; transition: none; }
+      .project-shot .shot-link img { transition: none; }
+      .project-shot:hover .shot-link img { transform: none; }
     }
   </style>
   <script>document.documentElement.classList.add('js');</script>
@@ -510,7 +602,8 @@
   <nav>
     <div class="container">
       <a class="nav-logo" href="#hero" aria-label="Aayush Pokhrel, home">AP</a>
-      <ul class="nav-links">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
+      <ul class="nav-links" id="nav-menu">
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
         <li><a href="#work">Projects</a></li>
@@ -521,7 +614,6 @@
 
   <section id="hero">
     <div class="container">
-      <span class="tag">Open to opportunities · Graduated April 2026</span>
       <h1>Aayush<br>Pokhrel:<br><em>CS & AI.</em></h1>
       <p class="hero-sub">
         Computer Science graduate from the University of Cincinnati with hands-on experience
@@ -532,6 +624,12 @@
         <a class="btn" href="#work">View my projects</a>
         <a class="btn btn-ghost" href="#contact">Get in touch</a>
       </div>
+      <dl class="hero-spec">
+        <div><dt>Status</dt><dd>Open to full-time roles</dd></div>
+        <div><dt>Focus</dt><dd>ML · Data · Software</dd></div>
+        <div><dt>Based</dt><dd>Cincinnati, OH</dd></div>
+        <div><dt>Graduated</dt><dd>April 2026</dd></div>
+      </dl>
     </div>
   </section>
 
@@ -801,6 +899,26 @@
       fadeEls.forEach(el => el.classList.add('visible'));
     }
 
+    // Mobile menu drawer toggle.
+    const navEl = document.querySelector('nav');
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    if (navEl && navToggle && navMenu) {
+      const setMenu = (open) => {
+        navEl.classList.toggle('menu-open', open);
+        navToggle.setAttribute('aria-expanded', String(open));
+        navToggle.textContent = open ? 'Close' : 'Menu';
+      };
+      navToggle.addEventListener('click', () => setMenu(!navEl.classList.contains('menu-open')));
+      navMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navEl.classList.contains('menu-open')) setMenu(false);
+      });
+      document.addEventListener('click', (e) => {
+        if (navEl.classList.contains('menu-open') && !navEl.contains(e.target)) setMenu(false);
+      });
+    }
+
     // Click-to-enlarge lightbox. Without JS the links open the full image directly.
     const lightbox = document.getElementById('lightbox');
     if (lightbox) {
@@ -837,8 +955,8 @@
     }
   </script>
 
-  <!-- Cloudflare Web Analytics (privacy-first, cookieless). Do NOT also enable the Pages "Metrics" auto-injection, or visits count twice. -->
-  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ebb2d5123a86433cbb7600be7388bf91"}'></script>
+  <!-- Cloudflare Web Analytics (privacy-first, cookieless) for aayushpokhrel1.github.io -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "02d3c2ef2e46458dbb8a813c21064f73"}'></script>
 
 </body>
 </html>
