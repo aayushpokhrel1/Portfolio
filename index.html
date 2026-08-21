@@ -365,6 +365,54 @@
       padding: 0.5rem 0.1rem 0.05rem;
       line-height: 1.4;
     }
+    .project-shot .shot-link {
+      display: block;
+      cursor: zoom-in;
+      position: relative;
+    }
+    .project-shot { transition: border-color 0.2s; }
+    .project-shot:hover { border-color: var(--muted); }
+    .project-shot .shot-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    /* Click-to-enlarge lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 5vmin;
+      background: rgba(20,18,15,0.92);
+      backdrop-filter: blur(4px);
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 92vw;
+      max-height: 88vh;
+      width: auto;
+      height: auto;
+      background: #fff;
+      border: 1px solid rgba(247,245,240,0.15);
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.2rem;
+      right: 1.2rem;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: transparent;
+      border: 1px solid rgba(247,245,240,0.4);
+      padding: 0.5rem 0.9rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .lightbox-close:hover { border-color: var(--bg); background: rgba(247,245,240,0.12); }
     /* ── Also (secondary work) ── */
     .also {
       margin-top: 2.5rem;
@@ -574,11 +622,15 @@
           <h3 class="project-title">AI Inventory Management System</h3>
           <div class="project-gallery">
             <figure class="project-shot">
-              <img src="assets/01-Inventory_Dashboard.png" alt="Warehouse inventory operations dashboard showing total items and units, top items by quantity, weekly activity, category distribution, and a low-stock table." loading="lazy" decoding="async"/>
+              <a class="shot-link" href="assets/01-Inventory_Dashboard.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/01-Inventory_Dashboard.png" alt="Warehouse inventory operations dashboard showing total items and units, top items by quantity, weekly activity, category distribution, and a low-stock table." loading="lazy" decoding="async"/>
+              </a>
               <figcaption>Operations console, inventory overview</figcaption>
             </figure>
             <figure class="project-shot">
-              <img src="assets/01-Simulation.png" alt="Gazebo warehouse simulation alongside a live object-detection feed and ROS2 navigation logs routing a robot between aisles." loading="lazy" decoding="async"/>
+              <a class="shot-link" href="assets/01-Simulation.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/01-Simulation.png" alt="Gazebo warehouse simulation alongside a live object-detection feed and ROS2 navigation logs routing a robot between aisles." loading="lazy" decoding="async"/>
+              </a>
               <figcaption>Warehouse simulation, live detection</figcaption>
             </figure>
           </div>
@@ -606,11 +658,15 @@
           <h3 class="project-title">Playstat: Sports Analytics Dashboard</h3>
           <div class="project-gallery">
             <figure class="project-shot">
-              <img src="assets/02-ParlayBuilder.png" alt="Playstat parlay builder listing tonight's low-risk parlays with model hit probabilities and payout multipliers for each card." loading="lazy" decoding="async"/>
+              <a class="shot-link" href="assets/02-ParlayBuilder.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/02-ParlayBuilder.png" alt="Playstat parlay builder listing tonight's low-risk parlays with model hit probabilities and payout multipliers for each card." loading="lazy" decoding="async"/>
+              </a>
               <figcaption>Parlay builder, tonight's slate</figcaption>
             </figure>
             <figure class="project-shot">
-              <img src="assets/02-DataAnalytics.png" alt="Playstat model backtest table showing record, unit profit, and ROI broken down by bet segment and multiplier, with paper line-movement stats." loading="lazy" decoding="async"/>
+              <a class="shot-link" href="assets/02-DataAnalytics.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/02-DataAnalytics.png" alt="Playstat model backtest table showing record, unit profit, and ROI broken down by bet segment and multiplier, with paper line-movement stats." loading="lazy" decoding="async"/>
+              </a>
               <figcaption>Model backtest, ROI by segment</figcaption>
             </figure>
           </div>
@@ -638,11 +694,15 @@
           <h3 class="project-title">Budgerr</h3>
           <div class="project-gallery">
             <figure class="project-shot">
-              <img src="assets/04-WebDashboard.png" alt="Budgerr web dashboard showing monthly betting and category budgets with progress bars and a list of recent logged bets." loading="lazy" decoding="async"/>
+              <a class="shot-link" href="assets/04-WebDashboard.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/04-WebDashboard.png" alt="Budgerr web dashboard showing monthly betting and category budgets with progress bars and a list of recent logged bets." loading="lazy" decoding="async"/>
+              </a>
               <figcaption>Web dashboard, monthly budgets</figcaption>
             </figure>
             <figure class="project-shot">
-              <img src="assets/04-MobileDashboard.png" alt="Budgerr mobile budget view with net bet profit, bank cash flow, and recurring-charge summaries above a bottom tab bar for Budget, Tonight, Accounts, Transactions, and Analytics." loading="lazy" decoding="async"/>
+              <a class="shot-link" href="assets/04-MobileDashboard.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/04-MobileDashboard.png" alt="Budgerr mobile budget view with net bet profit, bank cash flow, and recurring-charge summaries above a bottom tab bar for Budget, Tonight, Accounts, Transactions, and Analytics." loading="lazy" decoding="async"/>
+              </a>
               <figcaption>React Native mobile client</figcaption>
             </figure>
           </div>
@@ -709,6 +769,11 @@
     </div>
   </footer>
 
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged project image" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close enlarged image">Close</button>
+    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt=""/>
+  </div>
+
   <script>
     const fadeEls = document.querySelectorAll('.fade-in');
     if ('IntersectionObserver' in window) {
@@ -735,7 +800,45 @@
       // Older engines: reveal everything so nothing stays hidden.
       fadeEls.forEach(el => el.classList.add('visible'));
     }
+
+    // Click-to-enlarge lightbox. Without JS the links open the full image directly.
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+      const lightboxImg = lightbox.querySelector('img');
+      const lightboxClose = lightbox.querySelector('.lightbox-close');
+      const lightboxPlaceholder = lightboxImg.src;
+      let lastFocused = null;
+      const openLightbox = (src, alt) => {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || '';
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        lastFocused = document.activeElement;
+        lightboxClose.focus();
+      };
+      const closeLightbox = () => {
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        lightboxImg.src = lightboxPlaceholder;
+        if (lastFocused) lastFocused.focus();
+      };
+      document.querySelectorAll('.shot-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const img = link.querySelector('img');
+          openLightbox(link.getAttribute('href'), img ? img.alt : '');
+        });
+      });
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+      });
+    }
   </script>
+
+  <!-- Cloudflare Web Analytics (privacy-first, cookieless). Do NOT also enable the Pages "Metrics" auto-injection, or visits count twice. -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "ebb2d5123a86433cbb7600be7388bf91"}'></script>
 
 </body>
 </html>
