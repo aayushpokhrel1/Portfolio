@@ -591,6 +591,53 @@
     }
     .also-num { font-size: 11px; color: var(--muted); }
 
+    /* ── Notes (field log) ── */
+    .notes-intro {
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 520px;
+      margin: -1.8rem 0 2.4rem;
+    }
+    .note {
+      padding: 2rem 0;
+      border-top: 1px solid var(--rule);
+    }
+    .note:first-of-type { border-top: none; }
+    .note-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .note-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 0.7rem;
+    }
+    .note-body p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 0.8rem;
+    }
+    .note-body p:last-child { margin-bottom: 0; }
+    .note-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.9rem; }
+    .note-tags span {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(42,92,69,0.3);
+      padding: 0.2rem 0.6rem;
+    }
+
     /* ── Contact ── */
     #contact { border-bottom: none; }
     .contact-headline {
@@ -703,6 +750,7 @@
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
         <li><a href="#work">Projects</a></li>
+        <li><a href="#notes">Notes</a></li>
         <li><a href="assets/Pokhrel_Aayush_Resume_2026.pdf" target="_blank" rel="noopener">Résumé</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -939,6 +987,70 @@
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <section id="notes">
+    <div class="container fade-in">
+      <h2 class="section-label">Notes</h2>
+      <p class="notes-intro">
+        Working logs from the projects above: decisions, postmortems, and the
+        things I changed my mind about.
+      </p>
+
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Playstat</span>
+        </div>
+        <h3 class="note-title">Why I retired a model that worked in the notebook</h3>
+        <div class="note-body">
+          <p>
+            The Playstat model backtested well in isolation and still lost to the
+            market. I had an XGBoost stack with negative-binomial output
+            distributions and conformal calibration, and on paper the prediction
+            intervals looked honest. But when I graded it against de-vigged market
+            lines instead of raw outcomes, the edge mostly disappeared: the market
+            was already pricing in what my features thought they had discovered.
+          </p>
+          <p>
+            Rather than keep tuning a model that was beating the wrong baseline, I
+            retired it. The lesson I kept is that the baseline is the experiment. A
+            well-calibrated model measured against an easy target tells you almost
+            nothing. I'm rebuilding now on cleaner data and grading every version
+            against the market from day one, not at the end.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>XGBoost</span><span>Backtesting</span><span>Calibration</span>
+        </div>
+      </article>
+
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · UDRI</span>
+        </div>
+        <h3 class="note-title">Cutting a quantum simulation from 48 hours to 5</h3>
+        <div class="note-body">
+          <p>
+            The first working version of the DNA quantum simulation took about 48
+            hours per run. With 100-plus runs planned, that was a non-starter. The
+            naive Schrödinger solver spent most of its time in tight per-element
+            loops and an integrator taking far smaller steps than the dynamics
+            actually needed.
+          </p>
+          <p>
+            Four changes got it to roughly five hours: vectorizing the state updates
+            so NumPy worked in batches, swapping in an integration method that stays
+            stable at larger steps, moving the heavy linear algebra onto the GPU, and
+            parallelizing across runs. Later I trained PyTorch surrogate models to
+            approximate the dynamics outright, so parameter sweeps no longer needed
+            the full solver at all.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>NumPy</span><span>Vectorization</span><span>GPU</span><span>PyTorch</span>
+        </div>
+      </article>
     </div>
   </section>
 
