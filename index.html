@@ -1109,6 +1109,69 @@
           <span>NumPy</span><span>Vectorization</span><span>GPU</span><span>PyTorch</span>
         </div>
       </article>
+
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Budgerr</span>
+        </div>
+        <h3 class="note-title">The auth bypass hiding in FastAPI's own docs</h3>
+        <div class="note-body">
+          <p>
+            Budgerr's API sits behind a single global X-API-Key dependency, so I
+            assumed every route needed the key. It didn't. FastAPI builds its own
+            /docs, /openapi.json, and /redoc routes, and because the framework adds
+            them itself, my app-level dependency never saw them: anyone could pull
+            the full API schema, the exact shape of every endpoint, with no key at
+            all. It stayed harmless only because the API wasn't public yet, and I
+            caught it during deploy prep. The fix was to construct the app with
+            docs_url, redoc_url, and openapi_url set to None, then re-add those three
+            as ordinary key-gated routes, leaving /health as the one deliberate
+            exempt path so container and systemd healthchecks still pass.
+          </p>
+          <p>
+            What got me was how reasonable the wrong assumption felt: I wrote one
+            global dependency and trusted the word global. The lesson I kept is that
+            it only guards the routes your code registers, not the ones the framework
+            generates for you, so global auth is only as global as the surfaces your
+            check can actually see. Now I probe a supposedly locked API with an
+            unauthenticated request to every surface, including the ones I never wrote.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>FastAPI</span><span>API Keys</span><span>Security</span>
+        </div>
+      </article>
+
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Budgerr</span>
+        </div>
+        <h3 class="note-title">Letting Claude read my bet slips, but not save them</h3>
+        <div class="note-body">
+          <p>
+            Logging a parlay by hand is tedious, so I added POST /bets/parse-slip.
+            You upload a screenshot of a sportsbook slip, the backend hands it to
+            Claude's vision model (claude-sonnet-5), and it comes back as structured
+            fields: the sportsbook, bet type, stake, payout, and for each leg the
+            player, stat, line, side, and odds. The part I care about is what it does
+            not do. Nothing gets saved. The parsed result pre-fills the quick-entry
+            form so I can read it, fix whatever the model misread, and submit it
+            myself. Until ANTHROPIC_API_KEY is set it just returns 501, so the feature
+            is inert by default rather than half-wired.
+          </p>
+          <p>
+            The interesting question with an LLM in a real workflow turned out to be
+            less "can it parse this" and more where I let it in and where I stop it.
+            Turning a screenshot into a reviewable draft is a good fit, because I
+            still sign off before anything touches the ledger. Letting a model's read
+            auto-write a money record would not be. That parse-then-review seam is
+            where I decided the AI's job ends and mine begins.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Claude API</span><span>Vision</span><span>Human-in-the-loop</span>
+        </div>
+      </article>
     </div>
   </section>
 
