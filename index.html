@@ -67,6 +67,7 @@
 
     :root {
       --bg: #f7f5f0;
+      --bg-2: #efece4;
       --ink: #1a1814;
       --muted: #726d67;
       --accent: #2a5c45;
@@ -338,6 +339,9 @@
       padding: 72px 0;
       border-bottom: 1px solid var(--rule);
     }
+    /* Tonal banding: alternating sections sit on a slightly deeper paper tone,
+       so the long scroll has rhythm without leaving the one warm family. */
+    #experience, #notes { background: var(--bg-2); }
     .section-label {
       display: flex;
       align-items: center;
@@ -351,12 +355,19 @@
       margin-bottom: 3rem;
     }
     /* A short forest tick leads the label; a longer forest rule continues after it. */
+    /* Header: a short leading tick, then a filled forest box (paper text),
+       then a rule that continues to the edge. */
     .section-label::before {
       content: '';
       width: 1.8rem;
       height: 2px;
       background: var(--accent);
       flex: none;
+    }
+    .section-label > span {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 0.22em 0.6em;
     }
     .section-label::after {
       content: '';
@@ -675,8 +686,13 @@
       padding: 0.2rem 0.6rem;
     }
 
-    /* ── Contact ── */
-    #contact { border-bottom: none; }
+    /* ── Contact (dark bookend: the page's back cover, mirroring the hero) ── */
+    #contact { border-bottom: none; background: var(--ink); color: var(--bg); }
+    #contact .section-label { color: var(--bg); }
+    #contact .section-label::before,
+    #contact .section-label::after { background: var(--accent-light); }
+    /* On the ink bookend, the box goes sage with ink text so it stays legible. */
+    #contact .section-label > span { background: var(--accent-light); color: var(--ink); }
     .contact-headline {
       font-family: var(--serif);
       font-size: clamp(1.6rem, 3vw, 2.2rem);
@@ -713,6 +729,13 @@
     }
     .contact-copy:hover { border-color: var(--ink); }
     .contact-copy.copied { color: var(--accent); border-color: var(--accent); }
+    /* Invert the contact controls onto the ink bookend. */
+    #contact .contact-intro { color: rgba(247,245,240,0.72); }
+    #contact .contact-links a,
+    #contact .contact-copy { color: var(--bg); border-bottom-color: rgba(247,245,240,0.3); }
+    #contact .contact-links a:hover,
+    #contact .contact-copy:hover { border-bottom-color: var(--bg); }
+    #contact .contact-copy.copied { color: var(--accent-light); border-bottom-color: var(--accent-light); }
 
     /* ── Footer ── */
     footer { padding: 2rem 0; border-top: 1px solid var(--rule); }
@@ -734,6 +757,11 @@
       transition: border-color 0.2s, color 0.2s;
     }
     .footer-link:hover { color: var(--ink); border-color: var(--ink); }
+    /* Footer rides the same ink surface as Contact, closing the bookend. */
+    footer { background: var(--ink); border-top-color: rgba(247,245,240,0.14); }
+    footer .container { color: rgba(247,245,240,0.6); }
+    #contact + footer .footer-link { color: rgba(247,245,240,0.6); border-bottom-color: rgba(247,245,240,0.3); }
+    #contact + footer .footer-link:hover { color: var(--bg); border-bottom-color: var(--bg); }
 
     /* ── Fade-in (progressive enhancement: content only hides once JS is present) ── */
     .js .fade-in {
@@ -839,7 +867,7 @@
 
   <section id="about">
     <div class="container fade-in">
-      <h2 class="section-label">About</h2>
+      <h2 class="section-label"><span>About</span></h2>
       <div class="about-grid">
         <div class="about-text">
           <p>
@@ -883,7 +911,7 @@
 
   <section id="experience">
     <div class="container fade-in">
-      <h2 class="section-label">Experience</h2>
+      <h2 class="section-label"><span>Experience</span></h2>
 
       <div class="exp">
         <div class="exp-header">
@@ -916,7 +944,7 @@
 
   <section id="work">
     <div class="container fade-in">
-      <h2 class="section-label">Selected Projects</h2>
+      <h2 class="section-label"><span>Selected Projects</span></h2>
 
       <div class="project">
         <span class="project-num">01</span>
@@ -1050,7 +1078,7 @@
 
   <section id="notes">
     <div class="container fade-in">
-      <h2 class="section-label">Notes</h2>
+      <h2 class="section-label"><span>Notes</span></h2>
       <p class="notes-intro">
         Working logs from the projects above: decisions, postmortems, and the
         things I changed my mind about.
@@ -1177,7 +1205,7 @@
 
   <section id="contact">
     <div class="container fade-in">
-      <h2 class="section-label">Contact</h2>
+      <h2 class="section-label"><span>Contact</span></h2>
       <p class="contact-headline">Let's connect.</p>
       <p class="contact-intro">
         Actively looking for full-time roles in ML, data engineering, or software
