@@ -344,18 +344,25 @@
       gap: 0.85rem;
       font-family: var(--mono);
       font-weight: 400;
-      font-size: 12px;
+      font-size: 14px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--ink);
       margin-bottom: 3rem;
     }
+    /* A short forest tick leads the label; a longer forest rule continues after it. */
     .section-label::before {
       content: '';
       width: 1.8rem;
       height: 2px;
       background: var(--accent);
       flex: none;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: var(--accent);
     }
     h2 {
       font-family: var(--serif);
@@ -737,12 +744,14 @@
     .js .fade-in.visible { opacity: 1; transform: none; }
 
     /* Supporting: each section's forest rule draws left-to-right as the entry scrolls in. */
-    .js .section-label::before {
+    .js .section-label::before,
+    .js .section-label::after {
       transform: scaleX(0);
       transform-origin: left center;
       transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
     }
-    .js .fade-in.visible .section-label::before { transform: scaleX(1); }
+    .js .fade-in.visible .section-label::before,
+    .js .fade-in.visible .section-label::after { transform: scaleX(1); }
 
     /* Focal moment: the hero inks itself in, line by line, once on load. */
     @keyframes ink-in {
@@ -774,7 +783,8 @@
       .js .fade-in { opacity: 1; transform: none; transition: none; }
       .project-shot .shot-link img { transition: none; }
       .project-shot:hover .shot-link img { transform: none; }
-      .js .section-label::before { transform: scaleX(1); transition: none; }
+      .js .section-label::before,
+      .js .section-label::after { transform: scaleX(1); transition: none; }
       .js #hero .hl,
       .js #hero .hero-sub,
       .js #hero .hero-cta,
