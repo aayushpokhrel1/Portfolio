@@ -147,6 +147,7 @@
       background: rgba(247,245,240,0.88);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--rule);
+      transition: background 0.25s ease, border-color 0.25s ease;
     }
     nav .container {
       display: flex;
@@ -190,10 +191,12 @@
     nav.nav--hero .nav-links a.active { color: var(--bg); }
     nav.nav--hero .nav-links a.active::after { background: var(--accent-light); }
     /* Nav adapts over the dark hero; JS toggles .nav--hero. Default (JS off) stays legible paper. */
+    /* Over the dark hero, the bar takes a translucent-ink blur (the dark twin of
+       the paper nav) so hero text passes cleanly under it instead of overlapping. */
     nav.nav--hero {
-      background: transparent;
-      backdrop-filter: none;
-      border-bottom-color: transparent;
+      background: rgba(26,24,20,0.82);
+      backdrop-filter: blur(10px);
+      border-bottom-color: rgba(247,245,240,0.1);
     }
     nav.nav--hero .nav-logo { color: var(--bg); }
     nav.nav--hero .nav-links a { color: rgba(247,245,240,0.65); }
