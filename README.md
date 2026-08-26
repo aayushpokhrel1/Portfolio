@@ -1,6 +1,6 @@
 # Aayush Pokhrel — Portfolio
 
-This repository contains a small static portfolio site for Aayush Pokhrel (single-page site).
+This repository contains a small static portfolio site for Aayush Pokhrel.
 
 Summary
 - Static site built with plain HTML, CSS, and JavaScript. No build step or package manager configuration is required.
