@@ -44,6 +44,7 @@ Author
 - Aayush Pokhrel — https://github.com/aayushpokhrel1
 
 License
-- (Add license file or SPDX identifier here if you want to license this repository)
+- This repository is licensed under the MIT License. See the LICENSE file for full terms.
+- SPDX: MIT
 
 If you want, expand any section (deployment with CI, GitHub Actions, or automated resume generation) and I’ll add it.
