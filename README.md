@@ -47,4 +47,3 @@ License
 - This repository is licensed under the MIT License. See the LICENSE file for full terms.
 - SPDX: MIT
 
-If you want, expand any section (deployment with CI, GitHub Actions, or automated resume generation) and I’ll add it.
