@@ -1,6 +1,6 @@
 # Aayush Pokhrel — Portfolio
 
-This repository contains a small static portfolio site for Aayush Pokhrel (single-page site).
+This repository contains a small static portfolio site for Aayush Pokhrel, built as a single-page site.
 
 Summary
 - Static site built with plain HTML, CSS, and JavaScript. No build step or package manager configuration is required.
@@ -44,6 +44,5 @@ Author
 - Aayush Pokhrel — https://github.com/aayushpokhrel1
 
 License
-- (Add license file or SPDX identifier here if you want to license this repository)
-
-If you want, expand any section (deployment with CI, GitHub Actions, or automated resume generation) and I’ll add it.
+- This repository is licensed under the MIT License. See the LICENSE file for full terms.
+- SPDX: MIT
