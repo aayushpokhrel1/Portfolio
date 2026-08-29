@@ -1058,10 +1058,58 @@
         </div>
       </div>
 
+      <div class="project">
+        <span class="project-num">04</span>
+        <div>
+          <h3 class="project-title">RAG over SEC 10-K Filings</h3>
+          <p class="project-desc">
+            A retrieval-augmented generation app that answers questions about public
+            companies' annual reports, built from first principles with no RAG framework
+            to understand every layer: EDGAR document loading, HTML parsing by 10-K Item,
+            chunking, local BGE embeddings, vector search, prompt assembly, and generation.
+            The corpus is the latest 10-Ks for Apple, Microsoft, NVIDIA, and Alphabet,
+            stored in PostgreSQL with pgvector; each chunk keeps its source metadata so
+            every DeepSeek answer comes back with citations.
+          </p>
+          <div class="project-tags">
+            <span>Python</span><span>FastAPI</span><span>PostgreSQL</span>
+            <span>pgvector</span><span>Embeddings</span><span>RAG</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/aayushpokhrel1/sec-10k-rag" target="_blank" rel="noopener noreferrer">View code</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project">
+        <span class="project-num">05</span>
+        <div>
+          <h3 class="project-title">Chess Coach + From-Scratch Engine</h3>
+          <p class="project-desc">
+            Two parallel tracks that meet at the UCI protocol: a chess engine written from
+            scratch in C++ (board representation, legal move generation, search, evaluation,
+            compiling to WebAssembly later) and a beginner-focused coaching web app that
+            imports games, flags blunders, and explains them in plain language. Because the
+            coach targets any UCI engine, it uses Stockfish for analysis now and swaps in the
+            hand-written engine as it matures. Currently at milestone one: a tested board
+            representation with full FEN parse, generation, and round-trip, under a CMake +
+            doctest setup.
+          </p>
+          <div class="project-tags">
+            <span>C++</span><span>CMake</span><span>WebAssembly</span>
+            <span>Chess Engine</span><span>UCI</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/aayushpokhrel1/Chess_Coach" target="_blank" rel="noopener noreferrer">View code</a>
+            <span class="project-note">In progress</span>
+          </div>
+        </div>
+      </div>
+
       <div class="also">
         <p class="also-label">Also</p>
         <div class="also-item">
-          <span class="also-num">04</span>
+          <span class="also-num">06</span>
           <div>
             <h3 class="also-title">Stock Price Prediction (LSTM)</h3>
             <p class="also-desc">
@@ -1071,6 +1119,42 @@
             </p>
             <div class="project-tags">
               <span>Python</span><span>LSTM</span><span>Scikit-learn</span><span>yfinance</span>
+            </div>
+          </div>
+        </div>
+        <div class="also-item">
+          <span class="also-num">07</span>
+          <div>
+            <h3 class="also-title">Delegation Pipeline</h3>
+            <p class="also-desc">
+              A zero-dependency Python CLI that offloads token-heavy grunt work from a paid
+              Claude Code session to free or cheap models over any OpenAI-compatible endpoint.
+              The worker reads, searches, and edits files but cannot run shell or git by design,
+              so every change is reviewed as a diff before commit.
+            </p>
+            <div class="project-tags">
+              <span>Python</span><span>CLI</span><span>LLMs</span><span>Claude Code</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/aayushpokhrel1/delegation-pipeline" target="_blank" rel="noopener noreferrer">View code</a>
+            </div>
+          </div>
+        </div>
+        <div class="also-item">
+          <span class="also-num">08</span>
+          <div>
+            <h3 class="also-title">Knowledge Pipeline</h3>
+            <p class="also-desc">
+              A one-command, opinionated setup for a local-first knowledge stack: Obsidian plus
+              Graphify plus claude-obsidian, wired into Claude Code and past the Windows/WSL
+              permission gotcha that trips most people up, so the tools work together instead of
+              needing to be debugged into place.
+            </p>
+            <div class="project-tags">
+              <span>Shell</span><span>Obsidian</span><span>Graphify</span><span>Claude Code</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/aayushpokhrel1/knowledge-pipeline" target="_blank" rel="noopener noreferrer">View code</a>
             </div>
           </div>
         </div>
