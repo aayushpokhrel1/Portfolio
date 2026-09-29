@@ -32,8 +32,10 @@ Deployment
 - Netlify/Vercel: drag-and-drop the site folder or connect the repository; no build command is needed because this is a static site.
 
 Project structure
-- index.html — entry point
-- assets/ — images (project screenshots), favicon, and resume PDF (Pokhrel_Aayush_Resume_2026.pdf)
+- index.html — entry point; the whole site (markup, CSS, and JS) lives here
+- assets/ — project screenshots, favicon, Open Graph image, and resume PDF (Pokhrel_Aayush_Resume_2026.pdf)
+- CLAUDE.md — where things are written down, and the conventions for updating them
+- LICENSE — MIT
 - .gitignore — ignored files
 - README.md — this file
 

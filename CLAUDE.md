@@ -7,8 +7,21 @@ Personal portfolio site.
 | File | What it holds |
 | --- | --- |
 | `README.md` | What it is and how to run it |
+| `index.html` | The entire site: markup, CSS, and JS in one file. There is no build step and no other source file. |
 
 The vault folder is `Projects/Portfolio/index.md` (decisions, gotchas, current state of the site).
+
+## Writing a project entry
+
+**Get every figure from the project's own repo, at the time you write it.** Not from this
+repo, not from the vault, not from that project's README or handover. Those lag: in September
+2026 the vault recorded Family Recipes at "23 unit + 8 integration tests" while the repo had
+395, and the Chess Coach entry here described an engine four milestones behind the one that was
+live. Count the tests, read the migrations directory, check the latest commit.
+
+**Every entry carries measurements, or none does.** An entry with no numbers sitting beside
+entries that have them reads as a ranking, not as neutrality, and it will silently rank the
+newest work last.
 
 ## When Aayush says "update"
 
