@@ -8,7 +8,7 @@ Personal portfolio site.
 | --- | --- |
 | `README.md` | What it is and how to run it |
 
-**The vault has no `Portfolio/` folder yet** - create `Projects/Portfolio/index.md` when there is something worth keeping.
+The vault folder is `Projects/Portfolio/index.md` (decisions, gotchas, current state of the site).
 
 ## When Aayush says "update"
 
