@@ -1069,16 +1069,22 @@
         <div>
           <h3 class="project-title">Family Recipes</h3>
           <p class="project-desc">
-            A private, multi-family recipe vault, live and in daily use by my family. React
-            and Supabase, with row-level security in Postgres enforcing a three-way visibility
-            model (private, family, public) at the database rather than in the app. One AI
-            extraction function sits behind five front doors: paste, URL, a photo of a
-            handwritten card, voice, or freeform writing all route through the same
-            provider-agnostic endpoint and return a draft into the same form the manual path
-            uses. The model never saves; a person reviews first. On top of that sit meal
-            planning on a week grid, a grocery list grouped by supermarket aisle and scaled to
-            each plan's servings, a cupboard so the list stops telling you to buy what you
-            have, and cook mode. Deployed on Cloudflare Workers with CI on every push.
+            A private, multi-family recipe vault, live and in daily use. React and TypeScript
+            over Supabase, roughly 12.7k lines across 142 source files behind 395 tests in 63
+            files, with 29 Postgres migrations and three Edge Functions. Row-level security
+            enforces a three-way visibility model (private, family, public) in the database
+            rather than in the app, so a client that skipped the API layer still could not
+            read another family's recipes. One AI extraction function sits behind five front
+            doors: paste, URL, a photo of a handwritten card, voice, or freeform writing all
+            route through the same provider-agnostic OpenAI-compatible endpoint and return a
+            draft into the same form the manual path uses, so the model never writes and a
+            person always reviews. On top of that sit meal planning on a drag-and-drop week
+            grid, a grocery list grouped by supermarket aisle and scaled per plan item's
+            servings, leftovers that fill a slot without buying twice, a cupboard so the list
+            stops telling you to buy what you already have, in-family comments, cook mode, and
+            a Potluck feed of other households' public recipes. All data access is isolated in
+            one folder so the Supabase-to-self-hosted swap stays a bounded change. Deployed on
+            Cloudflare Workers with GitHub Actions CI on every push.
           </p>
           <div class="project-tags">
             <span>React</span><span>TypeScript</span><span>Supabase</span>
@@ -1106,16 +1112,28 @@
           </div>
           <p class="project-desc">
             Two tracks that meet at the UCI protocol: a chess engine written from scratch in
-            C++, and a beginner-focused coaching site that imports games, flags blunders, and
-            explains them in plain language. The engine proves its move generation with perft
-            against published node counts, then searches with negamax, alpha-beta, iterative
-            deepening, and quiescence search so it stops banking material it is about to lose
-            to a recapture. Adding a transposition table, killer and history ordering,
-            null-move pruning, late move reductions, aspiration windows, and magic bitboards
-            took a depth-6 search of the start position from about 24 seconds to about 0.35.
-            It compiles to WebAssembly, so the site's "play the engine" mode is my engine, at
-            strength levels calibrated by a rating gauntlet. Stockfish stays the analyst,
-            because mine is not yet fast enough for depth-12 analysis.
+            C++ (about 3.3k lines, no chess libraries) and a beginner-focused coaching site
+            that imports games, flags blunders, and explains them in plain language. The
+            engine proves its move generation with perft against published node counts on
+            three reference positions, then searches with negamax, alpha-beta, iterative
+            deepening, and a quiescence search that fixed the horizon-effect blunders. Layering
+            on a Zobrist-hashed transposition table, killer and history move ordering,
+            null-move pruning, late move reductions, aspiration windows (about 44% fewer nodes
+            at depth 7+), and magic bitboards took a depth-6 search of the start position from
+            roughly 24 seconds to 0.35, about 68x, with perft unchanged at every step as the
+            proof nothing broke. Evaluation v2 adds mobility, the bishop pair, pawn structure,
+            king safety, passed pawns, and rooks on open files over fully tapered piece-square
+            tables, and every term is A/B tested by self-play before it ships: passed pawns
+            measured +31 Elo, open files +24, the phased king +38, all at 95 to 98% likelihood
+            of superiority. Several plausible terms were dropped when they failed to show a
+            confident gain, which is the point of testing them. The engine compiles to
+            WebAssembly and runs in a Web Worker, so the site's "play the engine" mode is my
+            engine at levels calibrated against Stockfish (roughly 1190, 1520, and 1660 Elo).
+            The coach classifies every move by eval swing, explains the mistakes from the
+            engine's own line, breaks a batch of games down by phase and error category,
+            replays your blunders back as graded drills, and draws an evaluation graph across
+            the game. Stockfish stays the analyst, because mine is not yet fast enough for
+            depth-12 analysis.
           </p>
           <div class="project-tags">
             <span>C++</span><span>WebAssembly</span><span>CMake</span>
@@ -1156,20 +1174,35 @@
         <div>
           <h3 class="project-title">DNA Computing &amp; Storage: Three Papers</h3>
           <p class="project-desc">
-            A three-repository research line growing out of my UDRI work, each one a runnable
-            codebase behind a manuscript. The first builds a validated tight-binding solver for
-            hole transport along DNA, batches the eigendecomposition across a whole parameter
-            sweep for roughly a 440x speedup over the naive RK4 baseline, and trains PyTorch
-            surrogates that skip the solver entirely. The second defines five device-level
-            memory metrics that apply to both a DNA element and a silicon cell, computes the
-            DNA side from that solver, and places it beside cited silicon specifications with
-            a clear split between what is modeled and what is measured. The third is separate
-            physics entirely: a constraint-aware DNA data-storage codec with Reed-Solomon and
-            fountain error correction, a simulated synthesis and sequencing channel, and a
-            benchmark that reaches 1.498 bits per nucleotide at 4% redundancy and recovers a
-            92 kB file exactly through a 1% dropout. The framing is deliberate: the
-            contribution is a measurable framework, never a headline verdict that DNA beats
-            silicon.
+            A three-repository research line growing out of my UDRI work, each one a runnable,
+            tested codebase behind a manuscript, MIT for the code and CC-BY for the paper.
+            <strong>Paper one</strong> builds a validated tight-binding solver for quantum hole
+            transport along DNA and makes the computation the contribution: batching the
+            eigendecomposition over a whole parameter sweep in one call runs about 440x faster
+            than the naive RK4 baseline on CPU and about 2300x on a CUDA GPU, while staying
+            exact (max error 2.5e-14 in float64). PyTorch surrogates then skip the solver
+            outright at about 1.7% mean absolute population error, roughly 233x faster than the
+            optimized solver and so well past 10,000x versus the naive one, and a
+            sequence-to-behavior surrogate predicts sequence-dependent delocalization at
+            r ≈ 0.99. Built-in asserts fail the run if an "optimized" solver disagrees with the
+            reference or is not faster, so a fast-but-wrong result cannot ship.
+            <strong>Paper two</strong> defines five device-level memory metrics (read contrast,
+            bit density, read speed, energy per operation, retention) that apply to both a DNA
+            element and a resistive silicon cell, computes the DNA side from that solver with
+            every assumption recorded, and places it beside cited RRAM, PCM, and MRAM
+            specifications, with a citation-integrity checker enforcing that every reference
+            carries an author, title, year, and DOI. <strong>Paper three</strong> is separate
+            physics entirely: a constraint-aware DNA data-storage codec across two base codecs
+            and two error-correction families, with a seeded synthesis and sequencing channel,
+            marker resync plus inner Reed-Solomon for insertions and deletions, and codec-level
+            random access. Screening lifts density from 0.634 to 0.780 bits per nucleotide at
+            1x redundancy and reaches 1.498 at 4%, which sits between the published Grass and
+            Erlich anchors; a 92 kB file goes into 2,999 oligos and comes back exactly through
+            1% dropout. Two findings corrected my own hypotheses: Reed-Solomon beats fountain
+            at fixed redundancy, so fountain's real edge is ratelessness rather than erasure
+            efficiency, and the indel layer only works over an error-localized base codec. The
+            framing throughout is deliberate: the contribution is a measurable framework, never
+            a headline verdict that DNA beats silicon.
           </p>
           <div class="project-tags">
             <span>Python</span><span>NumPy</span><span>PyTorch</span>
@@ -1191,12 +1224,20 @@
           <p class="project-desc">
             Secure phone-to-workstation access to a coding agent, so a build that starts at my
             desk can continue from the bus. Everything rides a private Tailscale (WireGuard)
-            mesh with no port forwarding and nothing exposed to the public internet. Two layers
-            sit on that backbone: a terminal path (OpenSSH plus a persistent tmux session) for
-            full control, and a self-hosted bridge built on the Claude Agent SDK that streams a
-            session to a mobile PWA with tool-approval buttons, Web Push when the agent needs a
-            decision, inline diffs, and a live terminal. Cross-platform setup scripts for
-            Linux, macOS, and Windows with WSL.
+            mesh: no port forwarding, no firewall holes, nothing exposed to the public
+            internet. Two layers sit on that one backbone. The terminal path is OpenSSH plus a
+            persistent tmux session for full control, with setup scripts for Linux, macOS, and
+            Windows with WSL that handle the platform traps (Windows OpenSSH silently ignores
+            per-user keys for admin accounts, so they have to land in
+            the machine-wide administrators key file with the right ACLs). The app path is a
+            self-hosted TypeScript bridge, about 1.7k lines, driving the agent through the
+            Claude Agent SDK in headless streaming mode and serving an installable PWA bound
+            only to the Tailscale interface behind a bearer token. It ships three approval
+            modes, Web Push with deep links when the agent needs a decision, durable per-repo
+            sessions with history replay and auto-reconnect on foreground, inline rendered
+            diffs for every edit, a cross-repo session overview, and a real xterm.js terminal
+            attached to the live tmux session with its scrollback replayed so you land on
+            history rather than a blank screen.
           </p>
           <div class="project-tags">
             <span>TypeScript</span><span>Node.js</span><span>Tailscale</span>
@@ -1252,11 +1293,13 @@
             <h3 class="also-title">Power Automate Flows</h3>
             <p class="also-desc">
               A library of cloud and desktop (RPA) flows that automate deterministic plumbing:
-              sorting a Downloads folder, routing generated resumes into their matching job
-              folders, a menu-driven PDF merge/split/compress tool. Each one ships with the
-              exported artifact and a plain-English recipe, so it can be rebuilt action by
-              action rather than trusted as a black box. The organizing rule is that plumbing
-              goes to automation and judgment stays with a person.
+              a Downloads janitor that sorts by category without ever overwriting or touching
+              an in-progress download and ships a dry-run mode, a router that files generated
+              resumes into their matching per-job folders by exact-name match, and a
+              menu-driven PDF merge, split, and compress tool. Each flow ships the exported
+              artifact and a plain-English recipe so it can be rebuilt action by action rather
+              than trusted as a black box. The organizing rule is that deterministic plumbing
+              goes to automation and anything needing judgment stays with a person.
             </p>
             <div class="project-tags">
               <span>Power Automate</span><span>RPA</span><span>Automation</span>
