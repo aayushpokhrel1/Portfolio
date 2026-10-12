@@ -489,6 +489,32 @@
       margin-bottom: 0.8rem;
       line-height: 1.8;
     }
+    /* Every project reads the same way: a short lead, then 3 to 4 points.
+       Keep both when editing an entry; one without the other breaks the rhythm. */
+    .project-points {
+      list-style: none;
+      margin: 0 0 0.9rem;
+      padding: 0;
+    }
+    .project-points li {
+      position: relative;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.75;
+      padding-left: 1.1rem;
+      margin-bottom: 0.45rem;
+    }
+    .project-points li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.72em;
+      width: 5px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .project-points li:last-child { margin-bottom: 0; }
+    .project-points strong { color: var(--ink); font-weight: 500; }
     .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .project-tags span {
       font-size: 10px;
@@ -974,12 +1000,31 @@
             </figure>
           </div>
           <p class="project-desc">
-            Real-time item tracking built by integrating a TensorFlow image-recognition
-            model with a Node.js REST API and a PostgreSQL schema with user auth. I built
-            the model integration layer, ran system-wide integration and performance
-            testing, and modeled item flow through the recognition pipeline in a real-time
-            warehouse simulation to measure tracking accuracy and latency at scale.
+            A senior design team project: real-time warehouse item tracking, built by
+            integrating a TensorFlow image-recognition model with a Node.js REST API and a
+            PostgreSQL schema with user authentication, alongside a Gazebo simulation routing
+            a robot between aisles over ROS2.
           </p>
+          <ul class="project-points">
+            <li>
+              <strong>My part</strong> was the model integration layer: the seam where the
+              recognition output became records the API and database could act on.
+            </li>
+            <li>
+              Ran system-wide integration and performance testing across the whole stack,
+              which is where the interesting failures lived rather than inside any one
+              component.
+            </li>
+            <li>
+              Modeled item flow through the recognition pipeline in a real-time warehouse
+              simulation to measure tracking accuracy and latency at scale, rather than only
+              on held-out images.
+            </li>
+            <li>
+              An operations console surfaces stock levels, category distribution, weekly
+              activity and a low-stock table for the people actually running the floor.
+            </li>
+          </ul>
           <div class="project-tags">
             <span>Python</span><span>TensorFlow</span><span>Computer Vision</span>
             <span>Node.js</span><span>PostgreSQL</span><span>REST APIs</span>
@@ -994,7 +1039,7 @@
       <div class="project">
         <span class="project-num">02</span>
         <div>
-          <h3 class="project-title">Playstat: Sports Analytics Dashboard</h3>
+          <h3 class="project-title">Playstat: Market-Ranked Parlay Builder</h3>
           <div class="project-gallery">
             <figure class="project-shot">
               <a class="shot-link" href="assets/02-ParlayBuilder.png" target="_blank" rel="noopener noreferrer">
@@ -1010,16 +1055,38 @@
             </figure>
           </div>
           <p class="project-desc">
-            A FastAPI and PostgreSQL backend with a Next.js dashboard, ingesting ~1M stat
-            rows across 6 leagues from 4 external APIs via 3 scheduled daily jobs. I built
-            an XGBoost model with negative-binomial distributions and conformal calibration
-            (retired after backtesting underperformed market baselines, now rebuilding on
-            better data) and a combinatorial optimizer that ranks outcomes by de-vigged
-            joint probability, backed by a 98-test pytest suite and GitHub Actions CI.
+            A market-ranked parlay builder on a paper ledger, live daily for MLB. It ranks
+            legs by the de-vigged market price rather than by a model, searching for the
+            combination of favourites that reaches a payout target with the highest chance of
+            hitting: the least-bad combination, not a winner.
           </p>
+          <ul class="project-points">
+            <li>
+              <strong>There is no prediction model, deliberately.</strong> I built an XGBoost
+              stack with negative-binomial outputs and conformal calibration, graded it against
+              de-vigged market lines rather than raw outcomes, found the edge was already priced
+              in, and deleted it.
+            </li>
+            <li>
+              <strong>It states its own negative expected value.</strong> The builder is
+              structurally negative-EV by arithmetic rather than by bad luck, and every number
+              it reports carries that caveat.
+            </li>
+            <li>
+              Ingests games, box scores and sportsbook lines, shops each leg across six books
+              for the best price, and rebuilds a higher-confidence card once lineups post so
+              legs that would void are cut. Three price snapshots a day make closing-line
+              movement measurable.
+            </li>
+            <li>
+              FastAPI, PostgreSQL and Next.js over roughly 12.3k lines of Python, with about
+              440 pytest cases and GitHub Actions CI. MLB is live; five more leagues are built
+              and gated behind paid data or their season.
+            </li>
+          </ul>
           <div class="project-tags">
             <span>Python</span><span>FastAPI</span><span>PostgreSQL</span>
-            <span>Next.js</span><span>XGBoost</span><span>CI/CD</span>
+            <span>Next.js</span><span>Optimization</span><span>CI/CD</span>
           </div>
           <div class="project-links">
             <a href="https://github.com/aayushpokhrel1/Playstat" target="_blank" rel="noopener noreferrer">View code</a>
@@ -1033,30 +1100,47 @@
           <h3 class="project-title">Budgerr</h3>
           <div class="project-gallery">
             <figure class="project-shot">
-              <a class="shot-link" href="assets/04-WebDashboard.png" target="_blank" rel="noopener noreferrer">
-                <img src="assets/04-WebDashboard.png" alt="Budgerr web dashboard showing monthly betting and category budgets with progress bars and a list of recent logged bets." loading="lazy" decoding="async"/>
+              <a class="shot-link" href="assets/03-WebDashboard.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/03-WebDashboard.png" alt="Budgerr web dashboard showing monthly betting and category budgets with progress bars and a list of recent logged bets." loading="lazy" decoding="async"/>
               </a>
               <figcaption>Web dashboard, monthly budgets</figcaption>
             </figure>
             <figure class="project-shot">
-              <a class="shot-link" href="assets/04-MobileDashboard.png" target="_blank" rel="noopener noreferrer">
-                <img src="assets/04-MobileDashboard.png" alt="Budgerr mobile budget view with net bet profit, bank cash flow, and recurring-charge summaries above a bottom tab bar for Budget, Tonight, Accounts, Transactions, and Analytics." loading="lazy" decoding="async"/>
+              <a class="shot-link" href="assets/03-MobileDashboard.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/03-MobileDashboard.png" alt="Budgerr mobile budget view with net bet profit, bank cash flow, and recurring-charge summaries above a bottom tab bar for Budget, Tonight, Accounts, Transactions, and Analytics." loading="lazy" decoding="async"/>
               </a>
               <figcaption>React Native mobile client</figcaption>
             </figure>
           </div>
           <p class="project-desc">
-            A full-stack budgeting app with a FastAPI and PostgreSQL backend serving
-            React Native (Expo) mobile and Next.js / TypeScript web clients, using the
-            Plaid API for automated transaction sync. It runs an envelope-budgeting engine
-            with category limits, threshold alerts, and trend analysis, plus recurring-charge
-            and price-hike detection via custom clustering. Deployed with Docker Compose,
-            API-key auth, encrypted nightly backups, and GitHub Actions CI across three
-            repos (~78 tests).
+            A full-stack personal finance platform: a FastAPI and PostgreSQL backend serving
+            Next.js web and React Native (Expo) mobile clients, using the Plaid API for
+            automated transaction sync. About 12k lines across three repositories.
           </p>
+          <ul class="project-points">
+            <li>
+              An envelope-budgeting engine with category limits, threshold alerts and trend
+              analysis, plus recurring-charge and price-hike detection via custom clustering.
+            </li>
+            <li>
+              <strong>A vision model reads bet slips but never saves them.</strong> Uploading a
+              screenshot returns structured fields that pre-fill the entry form for me to
+              correct and submit; the feature returns 501 until a key is set, so it is inert
+              rather than half-wired.
+            </li>
+            <li>
+              Deployed with Docker Compose, API-key authentication and encrypted nightly
+              backups, after a deploy-prep audit found FastAPI's own generated docs routes
+              sitting outside the global auth dependency.
+            </li>
+            <li>
+              105 tests across the backend and web client, with GitHub Actions CI on all three
+              repositories.
+            </li>
+          </ul>
           <div class="project-tags">
             <span>Python</span><span>FastAPI</span><span>PostgreSQL</span>
-            <span>React Native</span><span>Next.js</span><span>Plaid</span><span>Docker</span>
+            <span>React Native</span><span>Next.js</span><span>Plaid</span>
           </div>
           <div class="project-links">
             <a href="https://github.com/aayushpokhrel1/Budgerr" target="_blank" rel="noopener noreferrer">View code</a>
@@ -1067,7 +1151,7 @@
       <div class="project">
         <span class="project-num">04</span>
         <div>
-          <h3 class="project-title">Family Recipes</h3>
+          <h3 class="project-title">Enamel Vault: A Family Recipe Platform</h3>
           <div class="project-gallery">
             <figure class="project-shot">
               <a class="shot-link" href="assets/04-FamilyRecipes.png" target="_blank" rel="noopener noreferrer">
@@ -1077,46 +1161,40 @@
             </figure>
           </div>
           <p class="project-desc">
-            A private, multi-family recipe vault, live and in daily use: about 22.2k lines
-            across 221 source files behind 777 tests in 108 files, with 46 Postgres migrations
-            and four Supabase Edge Functions. React and TypeScript over Supabase, deployed on
-            Cloudflare Workers with CI on every push. Row-level security enforces a three-way
-            visibility model (private, family, public) in the database rather than in the app,
-            so a client that skipped the API layer still could not read another family's
-            recipes. One AI extraction function sits behind five front doors: paste, URL, a
-            photo of a handwritten card, voice, or freeform writing all route through the same
-            provider-agnostic OpenAI-compatible endpoint and return a draft into the same form
-            the manual path uses, so the model never writes and a person always reviews. Drafts
-            are author-private and never rows in the recipe table, and a pending edit to a
-            published recipe tells you and asks when someone else changed it meanwhile rather
-            than silently overwriting. On top sit meal planning on a drag-and-drop week grid, a
-            grocery list grouped by supermarket aisle and scaled per plan item's servings,
-            leftovers that fill a slot without buying twice, a cupboard that suppresses what
-            you already have, cook mode, and Potluck, a public feed with search, follow, public
-            cook pages, and a save that keeps the original cook's attribution and survives the
-            original being deleted. Running it as a real site meant building the parts nobody
-            demos: a moderator console backed by its own service-role Edge Function that
-            re-checks permission server-side instead of trusting a hidden nav link, a report
-            queue with takedown and suspension, public terms, privacy, cookie and help pages,
-            WCAG AA contrast and labelling fixes, and no cookie banner because the app sets no
-            cookies and loads no analytics, which a test enforces rather than a promise. Since
-            a crawler never runs an SPA, the Worker itself renders per-recipe OpenGraph tags,
-            canonical URLs, JSON-LD, proxied preview images, and a sitemap. One Worker now
-            serves three hostnames by branching on the host: the marketing page, the live
-            family app, and a second product built on the same foundation, a
-            professional-kitchen app (about 3.7k lines, built and awaiting its DNS and Worker
-            route) that walks a dish from development to a trial at one site to the group menu,
-            keeping every revision and its reason, signing off one version, and logging a
-            site's substitutions against the group version instead of replacing it. The two
-            apps share tokens, components and auth, and share no data: the kitchen's tables
-            live in their own Postgres schema and a seal test fails the build if either side
-            reaches into the other. All data access stays isolated in one folder so moving off
-            Supabase remains a bounded swap.
+            A private, multi-family recipe vault, live in production and in daily use. React
+            and TypeScript over Supabase, served by Cloudflare Workers: about 22.2k lines
+            across 221 files, 777 tests in 108 files, 46 Postgres migrations and four Edge
+            Functions, with CI on every push.
           </p>
+          <ul class="project-points">
+            <li>
+              <strong>The access rules live in the database.</strong> Row-level security
+              enforces a three-way visibility model (private, family, public), so a client that
+              skipped the API layer entirely still could not read another family's recipes.
+            </li>
+            <li>
+              <strong>The model drafts, a person saves.</strong> One provider-agnostic
+              extraction service sits behind five front doors (paste, a URL, a photo of a
+              handwritten card, voice, freeform writing) and returns a reviewable draft into the
+              same form the manual path uses. It never writes.
+            </li>
+            <li>
+              <strong>The parts nobody demos.</strong> A report queue with takedown and
+              suspension, a moderator console whose service-role backend re-checks permission
+              server-side rather than trusting a hidden nav link, public terms and privacy
+              pages, WCAG AA fixes, and SEO rendered in the Worker because crawlers never run
+              an SPA.
+            </li>
+            <li>
+              <strong>A second product on the same foundation.</strong> A professional-kitchen
+              app (about 3.7k lines, built and awaiting DNS) walks a dish from development to a
+              site trial to the group menu. It lives in its own Postgres schema, and a seal test
+              fails the build if either app reaches into the other's data.
+            </li>
+          </ul>
           <div class="project-tags">
             <span>React</span><span>TypeScript</span><span>Supabase</span>
-            <span>PostgreSQL</span><span>Row-Level Security</span><span>LLMs</span>
-            <span>Cloudflare Workers</span><span>Vitest</span><span>SEO</span>
+            <span>PostgreSQL</span><span>Row-Level Security</span><span>Cloudflare Workers</span>
           </div>
           <div class="project-links">
             <a href="https://enamelvault.com" target="_blank" rel="noopener noreferrer">Live site</a>
@@ -1141,28 +1219,33 @@
           <p class="project-desc">
             Two tracks that meet at the UCI protocol: a chess engine written from scratch in
             C++ (about 3.3k lines, no chess libraries) and a beginner-focused coaching site
-            that imports games, flags blunders, and explains them in plain language. The
-            engine proves its move generation with perft against published node counts on
-            three reference positions, then searches with negamax, alpha-beta, iterative
-            deepening, and a quiescence search that fixed the horizon-effect blunders. Layering
-            on a Zobrist-hashed transposition table, killer and history move ordering,
-            null-move pruning, late move reductions, aspiration windows (about 44% fewer nodes
-            at depth 7+), and magic bitboards took a depth-6 search of the start position from
-            roughly 24 seconds to 0.35, about 68x, with perft unchanged at every step as the
-            proof nothing broke. Evaluation v2 adds mobility, the bishop pair, pawn structure,
-            king safety, passed pawns, and rooks on open files over fully tapered piece-square
-            tables, and every term is A/B tested by self-play before it ships: passed pawns
-            measured +31 Elo, open files +24, the phased king +38, all at 95 to 98% likelihood
-            of superiority. Several plausible terms were dropped when they failed to show a
-            confident gain, which is the point of testing them. The engine compiles to
-            WebAssembly and runs in a Web Worker, so the site's "play the engine" mode is my
-            engine at levels calibrated against Stockfish (roughly 1190, 1520, and 1660 Elo).
-            The coach classifies every move by eval swing, explains the mistakes from the
-            engine's own line, breaks a batch of games down by phase and error category,
-            replays your blunders back as graded drills, and draws an evaluation graph across
-            the game. Stockfish stays the analyst, because mine is not yet fast enough for
-            depth-12 analysis.
+            that imports your games, flags the blunders and explains them in plain language.
           </p>
+          <ul class="project-points">
+            <li>
+              <strong>Correctness before speed.</strong> Move generation is proven by perft
+              against published node counts on three reference positions, and perft stayed
+              unchanged through every optimization as the gate that nothing had broken.
+            </li>
+            <li>
+              <strong>A depth-6 search went from about 24 seconds to 0.35, roughly 68x.</strong>
+              A transposition table, killer and history ordering, null-move pruning, late move
+              reductions, aspiration windows (about 44% fewer nodes at depth 7+) and magic
+              bitboards, each toggle-guarded and proven exact.
+            </li>
+            <li>
+              <strong>Evaluation terms are A/B tested before they ship.</strong> Passed pawns
+              measured +31 Elo, rooks on open files +24, the phased king +38, at 95 to 98%
+              likelihood of superiority. Three plausible terms were dropped for failing to show
+              a confident gain.
+            </li>
+            <li>
+              <strong>It runs in the browser.</strong> The engine compiles to WebAssembly in a
+              Web Worker and is the opponent you play, at levels calibrated against Stockfish
+              (about 1190, 1520 and 1660 Elo). Stockfish stays the analyst, because mine is not
+              yet fast enough for depth-12 analysis.
+            </li>
+          </ul>
           <div class="project-tags">
             <span>C++</span><span>WebAssembly</span><span>CMake</span>
             <span>Search &amp; Evaluation</span><span>Bitboards</span><span>UCI</span>
@@ -1179,14 +1262,32 @@
         <div>
           <h3 class="project-title">RAG over SEC 10-K Filings</h3>
           <p class="project-desc">
-            A retrieval-augmented generation app that answers questions about public
-            companies' annual reports, built from first principles with no RAG framework
-            to understand every layer: EDGAR document loading, HTML parsing by 10-K Item,
-            chunking, local BGE embeddings, vector search, prompt assembly, and generation.
-            The corpus is the latest 10-Ks for Apple, Microsoft, NVIDIA, and Alphabet,
-            stored in PostgreSQL with pgvector; each chunk keeps its source metadata so
-            every DeepSeek answer comes back with citations.
+            A retrieval-augmented generation app that answers questions about public companies'
+            annual reports, built from first principles with no RAG framework so that every
+            layer is understood: EDGAR loading, HTML parsing by 10-K Item, chunking, embeddings,
+            vector search, prompt assembly and generation.
           </p>
+          <ul class="project-points">
+            <li>
+              The corpus is the latest 10-Ks for Apple, Microsoft, NVIDIA and Alphabet, pulled
+              live from SEC EDGAR and chunked at 1,200 characters with 150 of overlap.
+            </li>
+            <li>
+              Local BGE-small embeddings (384-dimensional) stored in PostgreSQL with pgvector,
+              so retrieval runs with no embedding API and no per-query cost.
+            </li>
+            <li>
+              <strong>Every answer is citable.</strong> Each chunk keeps its company, fiscal
+              year, 10-K Item, section title and source URL, which becomes the citation on the
+              generated answer.
+            </li>
+            <li>
+              <strong>A built-in evaluation suite rather than a vibe check.</strong> A labeled
+              12-question gold set scores retrieval on hit-rate, MRR, recall and graded nDCG,
+              with an optional LLM-as-judge pass rating faithfulness and relevance. The eval is
+              also what surfaced the retrieval gaps now on the roadmap.
+            </li>
+          </ul>
           <div class="project-tags">
             <span>Python</span><span>FastAPI</span><span>PostgreSQL</span>
             <span>pgvector</span><span>Embeddings</span><span>RAG</span>
@@ -1202,36 +1303,37 @@
         <div>
           <h3 class="project-title">DNA Computing &amp; Storage: Three Papers</h3>
           <p class="project-desc">
-            A three-repository research line growing out of my UDRI work, each one a runnable,
-            tested codebase behind a manuscript, MIT for the code and CC-BY for the paper.
-            <strong>Paper one</strong> builds a validated tight-binding solver for quantum hole
-            transport along DNA and makes the computation the contribution: batching the
-            eigendecomposition over a whole parameter sweep in one call runs about 440x faster
-            than the naive RK4 baseline on CPU and about 2300x on a CUDA GPU, while staying
-            exact (max error 2.5e-14 in float64). PyTorch surrogates then skip the solver
-            outright at about 1.7% mean absolute population error, roughly 233x faster than the
-            optimized solver and so well past 10,000x versus the naive one, and a
-            sequence-to-behavior surrogate predicts sequence-dependent delocalization at
-            r ≈ 0.99. Built-in asserts fail the run if an "optimized" solver disagrees with the
-            reference or is not faster, so a fast-but-wrong result cannot ship.
-            <strong>Paper two</strong> defines five device-level memory metrics (read contrast,
-            bit density, read speed, energy per operation, retention) that apply to both a DNA
-            element and a resistive silicon cell, computes the DNA side from that solver with
-            every assumption recorded, and places it beside cited RRAM, PCM, and MRAM
-            specifications, with a citation-integrity checker enforcing that every reference
-            carries an author, title, year, and DOI. <strong>Paper three</strong> is separate
-            physics entirely: a constraint-aware DNA data-storage codec across two base codecs
-            and two error-correction families, with a seeded synthesis and sequencing channel,
-            marker resync plus inner Reed-Solomon for insertions and deletions, and codec-level
-            random access. Screening lifts density from 0.634 to 0.780 bits per nucleotide at
-            1x redundancy and reaches 1.498 at 4%, which sits between the published Grass and
-            Erlich anchors; a 92 kB file goes into 2,999 oligos and comes back exactly through
-            1% dropout. Two findings corrected my own hypotheses: Reed-Solomon beats fountain
-            at fixed redundancy, so fountain's real edge is ratelessness rather than erasure
-            efficiency, and the indel layer only works over an error-localized base codec. The
-            framing throughout is deliberate: the contribution is a measurable framework, never
-            a headline verdict that DNA beats silicon.
+            Three repositories extending my research at the University of Dayton Research
+            Institute, each a runnable, tested codebase behind a manuscript. The framing is
+            deliberate throughout: the contribution is a measurable framework, never a headline
+            verdict that DNA beats silicon.
           </p>
+          <ul class="project-points">
+            <li>
+              <strong>Neural surrogates for DNA hole transport.</strong> A validated
+              tight-binding solver, batched over an entire parameter sweep for about 440x over
+              the naive RK4 baseline on CPU and 2,300x on GPU while staying exact to 2.5e-14.
+              PyTorch surrogates then replace it at about 1.7% mean error and 233x its speed.
+            </li>
+            <li>
+              <strong>Molecular-electronic memory against silicon.</strong> Five device-level
+              metrics defined so they apply to both a DNA element and a resistive silicon cell,
+              computed from that solver and placed beside cited RRAM, PCM and MRAM figures with
+              a strict split between what is modeled and what is measured.
+            </li>
+            <li>
+              <strong>A constraint-aware DNA data-storage codec.</strong> Two base codecs and
+              two error-correction families across a simulated synthesis and sequencing channel,
+              reaching 1.498 bits per nucleotide at 4% redundancy, between the published Grass
+              and Erlich anchors, and recovering a 92 kB file exactly through 1% dropout.
+            </li>
+            <li>
+              <strong>Two results corrected my own hypotheses.</strong> Reed-Solomon beats
+              fountain coding at fixed redundancy, so fountain's real advantage is ratelessness
+              rather than erasure efficiency; and the insertion-deletion layer only works over an
+              error-localized base codec.
+            </li>
+          </ul>
           <div class="project-tags">
             <span>Python</span><span>NumPy</span><span>PyTorch</span>
             <span>Quantum Simulation</span><span>Coding Theory</span><span>LaTeX</span>
@@ -1252,21 +1354,31 @@
           <p class="project-desc">
             Secure phone-to-workstation access to a coding agent, so a build that starts at my
             desk can continue from the bus. Everything rides a private Tailscale (WireGuard)
-            mesh: no port forwarding, no firewall holes, nothing exposed to the public
-            internet. Two layers sit on that one backbone. The terminal path is OpenSSH plus a
-            persistent tmux session for full control, with setup scripts for Linux, macOS, and
-            Windows with WSL that handle the platform traps (Windows OpenSSH silently ignores
-            per-user keys for admin accounts, so they have to land in
-            the machine-wide administrators key file with the right ACLs). The app path is a
-            self-hosted TypeScript bridge, about 1.7k lines, driving the agent through the
-            Claude Agent SDK in headless streaming mode and serving an installable PWA bound
-            only to the Tailscale interface behind a bearer token. It ships three approval
-            modes, Web Push with deep links when the agent needs a decision, durable per-repo
-            sessions with history replay and auto-reconnect on foreground, inline rendered
-            diffs for every edit, a cross-repo session overview, and a real xterm.js terminal
-            attached to the live tmux session with its scrollback replayed so you land on
-            history rather than a blank screen.
+            mesh: no port forwarding, no firewall holes, and nothing exposed to the public
+            internet.
           </p>
+          <ul class="project-points">
+            <li>
+              <strong>The terminal path</strong> is OpenSSH plus a persistent tmux session for
+              full shell control, with cross-platform setup scripts for Linux, macOS and Windows
+              with WSL that handle the traps, including Windows OpenSSH silently ignoring
+              per-user keys for administrator accounts.
+            </li>
+            <li>
+              <strong>The app path</strong> is a self-hosted TypeScript bridge (about 1.7k lines)
+              driving the agent through the Claude Agent SDK in headless streaming mode, serving
+              an installable PWA bound only to the Tailscale interface behind a bearer token.
+            </li>
+            <li>
+              Three tool-approval modes, Web Push with deep links when the agent needs a
+              decision, durable per-repo sessions with history replay and auto-reconnect on
+              foreground, and inline rendered diffs for every file edit.
+            </li>
+            <li>
+              A real xterm.js terminal attached to the live tmux session, with the pane's
+              scrollback replayed on attach so you land on history rather than a blank screen.
+            </li>
+          </ul>
           <div class="project-tags">
             <span>TypeScript</span><span>Node.js</span><span>Tailscale</span>
             <span>WebSockets</span><span>PWA</span><span>Agent SDK</span>
@@ -1320,14 +1432,10 @@
           <div>
             <h3 class="also-title">Power Automate Flows</h3>
             <p class="also-desc">
-              A library of cloud and desktop (RPA) flows that automate deterministic plumbing:
-              a Downloads janitor that sorts by category without ever overwriting or touching
-              an in-progress download and ships a dry-run mode, a router that files generated
-              resumes into their matching per-job folders by exact-name match, and a
-              menu-driven PDF merge, split, and compress tool. Each flow ships the exported
-              artifact and a plain-English recipe so it can be rebuilt action by action rather
-              than trusted as a black box. The organizing rule is that deterministic plumbing
-              goes to automation and anything needing judgment stays with a person.
+              Cloud and desktop (RPA) flows that automate deterministic plumbing: a Downloads
+              janitor that never overwrites and ships a dry run, a router filing generated
+              resumes into their matching job folders, and a menu-driven PDF toolkit. Each
+              ships its artifact and a rebuild recipe, so none of it is a black box.
             </p>
             <div class="project-tags">
               <span>Power Automate</span><span>RPA</span><span>Automation</span>
@@ -1343,8 +1451,8 @@
             <h3 class="also-title">Stock Price Prediction (LSTM)</h3>
             <p class="also-desc">
               An LSTM network forecasting Apple closing prices from 10+ years of historical
-              data, with MinMaxScaler feature scaling, RMSE evaluation, and actual-versus-predicted
-              visualization.
+              data, with MinMaxScaler feature scaling, RMSE evaluation, and an
+              actual-versus-predicted visualization. An early project, kept for the record.
             </p>
             <div class="project-tags">
               <span>Python</span><span>LSTM</span><span>Scikit-learn</span><span>yfinance</span>
