@@ -21,7 +21,27 @@ live. Count the tests, read the migrations directory, check the latest commit.
 
 **Every entry carries measurements, or none does.** An entry with no numbers sitting beside
 entries that have them reads as a ranking, not as neutrality, and it will silently rank the
-newest work last.
+newest work last. The same goes for length: entries drifted to an 8x spread (55 to 458 words)
+simply because some were revised and others were not, and the short ones read as the smaller
+projects.
+
+**The shape is fixed: a lead of 33 to 48 words, then exactly four `<li>` points, then six
+tags.** The CSS for the points carries the same warning. Keep both halves when you edit an
+entry, since a lead without points, or five points, breaks the rhythm the other seven set.
+Check it mechanically rather than by eye:
+
+```
+python -c "import io,re,html; s=io.open('index.html',encoding='utf-8').read(); w=s[s.index('<section id=\"work\"'):s.index('<section id=\"notes\"')]; [print(m.group(1), len(html.unescape(re.sub(r'<[^>]+>','',re.search(r'<p class=\"project-desc\">(.*?)</p>',m.group(3),re.S).group(1))).split()), len(re.findall(r'<li>',m.group(3)))) for m in re.finditer(r'<span class=\"project-num\">(\d+)</span>.*?<h3 class=\"project-title\">(.*?)</h3>(.*?)(?=<div class=\"project\">|<div class=\"also\">)', w, re.S)]"
+```
+
+**Re-read the project's README before rewriting its entry, not just its file counts.** Twice
+now a project had become a different thing than the site claimed: Playstat's prediction model
+was deleted outright while the entry said it was being rebuilt, and Family Recipes grew a
+second app and a brand name the entry had never heard of. A changed line count is a hint that
+the story changed too.
+
+**Never `git add -A assets`.** Two stray screenshots that live in that folder untracked on
+purpose have been swept into a commit that way. Add the specific files.
 
 ## When Aayush says "update"
 
