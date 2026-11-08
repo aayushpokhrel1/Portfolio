@@ -1813,6 +1813,24 @@
       }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
       fadeEls.forEach(el => observer.observe(el));
 
+      // Safety net, because the cost of this observer failing is not a missing
+      // animation, it is a whole section of the site rendering blank (which is
+      // exactly what shipped). Anything scrolled into view is revealed on scroll
+      // whether or not the observer ever said so, and this stops once everything
+      // is visible. Do NOT remove: the CSS hides content, so JS is the only thing
+      // that can ever show it.
+      const net = () => {
+        let left = 0;
+        fadeEls.forEach(el => {
+          if (el.classList.contains('visible')) return;
+          if (el.getBoundingClientRect().top < window.innerHeight * 0.92) el.classList.add('visible');
+          else left++;
+        });
+        if (!left) window.removeEventListener('scroll', net);
+      };
+      window.addEventListener('scroll', net, { passive: true });
+      window.addEventListener('load', net);
+
       // Nav goes transparent while the dark hero is in view, solid paper after.
       const nav = document.querySelector('nav');
       const hero = document.getElementById('hero');
