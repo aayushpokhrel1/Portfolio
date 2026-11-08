@@ -4,7 +4,7 @@ This repository contains a portfolio site for Aayush Pokhrel.
 
 Summary
 - Static site built with plain HTML, CSS, and JavaScript. No build step or package manager configuration is required.
-- Four hand-authored pages over one shared stylesheet and one shared script: `index.html` is the way in, `experience.html` holds both roles in full, `work.html` holds the full project entries, `notes.html` holds the field logs.
+- Four hand-authored pages (`index.html`, `experience.html`, `work.html`, `notes.html`) over one shared stylesheet and one shared script. Project structure, below, says what each page holds.
 
 Tech stack
 - HTML, CSS, JavaScript
@@ -25,11 +25,12 @@ Quick preview (recommended)
 Editing / Development
 - Files to edit:
   - index.html, experience.html, work.html, notes.html: page markup
-  - styles.css, site.js: shared by all three pages, one copy on purpose
+  - styles.css, site.js: shared by all four pages, one copy on purpose
   - assets/: images, favicon, and resume PDF
 - After editing any page, run `python scripts/check_shape.py`. It enforces the entry, card and
-  log shapes, checks every tag is closed and every internal anchor resolves, and exits
-  non-zero if not.
+  log shapes, checks every tag is closed and every internal anchor resolves, catches em and en
+  dashes, and fails if this file or CLAUDE.md states a page count that is not the real one. On a
+  clean run it prints each page's word count.
 - For live-reload during edits, use the "Live Server" VS Code extension or any static server with watch capability.
 
 Deployment
@@ -41,7 +42,7 @@ Project structure
 - experience.html: all five roles in full, what the UDRI research turned into, and education
 - work.html: the 8 full project entries and the 5 compact "Also" entries
 - notes.html: the 13 field logs in full
-- styles.css, site.js: all CSS and all JS, shared by the three pages
+- styles.css, site.js: all CSS and all JS, shared by the four pages
 - scripts/check_shape.py: the shape checker; run it after editing a page
 - docs/superpowers/specs/: the design of a change, written before building it
 - assets/: project screenshots, favicon, Open Graph image, and resume PDF (Pokhrel_Aayush_Resume_2026.pdf)

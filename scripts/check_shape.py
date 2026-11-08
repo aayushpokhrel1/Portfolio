@@ -12,6 +12,7 @@ Rules, all of them from CLAUDE.md:
   notes.html  13 field logs, each 2 paragraphs and 3 tags, no project twice in a row
   all pages   every tag closed, every internal anchor resolving, no em or en dashes
               (experience.html has no counted shape; it is checked for those three)
+  the docs    README.md and CLAUDE.md may not state a page count that is not the real one
 """
 import html
 import io
@@ -168,10 +169,33 @@ for page, body in src.items():
         elif ('id="%s"' % m.group(2)) not in src[target]:
             bad(page, "anchor #%s does not exist in %s" % (m.group(2), target))
 
+# Docs that count the pages go stale the moment a page is added, which happened within a
+# day of the split: README.md and CLAUDE.md both still said "all three pages". A spelled
+# number next to the word "pages" has to match reality. Specs are dated designs, so they
+# are exempt.
+SPELLED = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7}
+for doc in ("README.md", "CLAUDE.md"):
+    path = os.path.join(ROOT, doc)
+    if not os.path.exists(path):
+        continue
+    prose = io.open(path, encoding="utf-8").read()
+    for word, said in SPELLED.items():
+        if said == len(PAGES):
+            continue
+        near = "(?i)(?<![a-z])" + word + "(?![a-z])[^.]{0,24}?(?<![a-z-])pages?(?![a-z])"
+        for m in re.finditer(near, prose):
+            bad(doc, 'says "%s" but there are %d pages' % (m.group(0).strip(), len(PAGES)))
+
 if fail:
     print("FAIL (%d)" % len(fail))
     for f in fail:
         print("  " + f)
     sys.exit(1)
 
+for page in PAGES:
+    body = src[page][src[page].index("<body"):]
+    stripped = body
+    for t in ("script", "style"):
+        stripped = re.sub("<%s[^>]*>.*?</%s>" % (t, t), "", stripped, flags=re.S)
+    print("  %-17s %5d words" % (page, len(text(re.sub(r"<[^>]+>", " ", stripped)).split())))
 print("OK: 4 pages, 8 entries, 13 cards, 13 logs, every anchor resolving, no stray dashes")

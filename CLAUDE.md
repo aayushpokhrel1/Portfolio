@@ -7,12 +7,12 @@ Personal portfolio site.
 | File | What it holds |
 | --- | --- |
 | `README.md` | What it is and how to run it |
-| `index.html` | The way in: the hero's claim, a compressed about and experience, 13 project cards, the 13 field log titles, contact. About 1,050 words. |
+| `index.html` | The way in: the hero's claim, a compressed about and experience, 13 project cards, the 13 field log titles, contact. |
 | `experience.html` | All five roles in full with their bullets, what the UDRI research turned into, and education including coursework. |
 | `work.html` | The 8 full project entries (lead, four points, gallery, tags) and the 5 compact "Also" entries. |
 | `notes.html` | The 13 field logs in full. |
-| `styles.css` | All CSS for all three pages. **One copy on purpose**: three inline copies drift, and drift is what causes wrong work. |
-| `site.js` | All JS for all three pages: the reveal, the nav drawer, the lightbox, the scroll spy, the copy button. Same reason. |
+| `styles.css` | All CSS for all four pages. **One copy on purpose**: a copy per page drifts, and drift is what causes wrong work. |
+| `site.js` | All JS for all four pages: the reveal, the nav drawer, the lightbox, the scroll spy, the copy button. Same reason. |
 | `docs/superpowers/specs/` | The design of a change, written before building it. The three-page split is `2026-11-07-three-page-split-design.md`. |
 
 Still no build step and no package manager. Four hand-authored pages, one stylesheet, one
@@ -61,8 +61,9 @@ The figure is the point of the card: a card without one turns the index into a l
 which is the failure the three-page split was most at risk of. **A field log is two
 paragraphs and three tags**, and the index lists titles only.
 
-Check all of it mechanically rather than by eye. `python scripts/check_shape.py` prints every
-entry, card and log with its counts and exits non-zero on a violation.
+Check all of it mechanically rather than by eye. `python scripts/check_shape.py` names every
+violation and exits non-zero, and on a clean run prints each page's word count, which is why no
+doc here states one.
 
 **Re-read the project's README before rewriting its entry, not just its file counts.** Twice
 now a project had become a different thing than the site claimed: Playstat's prediction model
@@ -81,32 +82,19 @@ purpose have been swept into a commit that way. Add the specific files.
    (the path is per-machine). Add what this session learned that is worth keeping: a decision and
    its WHY, a non-obvious gotcha or fix, a research finding, a cross-project learning. This is the
    part that gets forgotten, and it is the part that compounds.
-2. **Every doc in this repo**, not only the one already open.
-3. **The handover**, but only its current-state numbers.
+2. **Every doc in this repo**, not only the one already open. There is no handover file here
+   on purpose: the current-state numbers it would hold are printed by `check_shape.py` and held
+   by `git log`.
 
-**Vault writes go through WSL, and note content must never appear on the command line.** The Bash
-tool re-quotes the wrapper, so backticks and apostrophes inside a note get executed or break the
-command. Write the note to a file first, then pass only literal paths:
+**Note content must never appear on a command line.** The Bash tool re-quotes the command on
+its way to the shell, so backticks and apostrophes inside a note get executed or break it, and it
+eats backslashes too (that is how `` in a patch became a literal backspace byte in
+`scripts/check_shape.py` on 2026-11-08). Write the note to a file, then pass only paths:
 
 ```
-wsl -d Ubuntu -- bash -lc 'cat /mnt/c/<tmp>/note.md >> /mnt/c/Users/aayus/Documents/Knowledge-Vault/Projects/Portfolio/index.md'
+python ~/.claude/bin/vault-note.py Portfolio <scratchpad>/note.md
 ```
 
-**Updating docs means making them TRUE, not just appending what shipped.** Correct or strike a
-stale claim where it sits rather than adding a newer entry underneath it, because the next reader
-may hit the old one first. Cross-check every number (versions, counts, commit) against reality
-instead of trusting what the file says.
-
-## Where knowledge goes
-
-A lesson has exactly one home, chosen by how far it reaches:
-
-- **A rule about specific code goes in a comment AT that code.** The most reliable form there is:
-  you cannot edit the function without reading the warning above it. A note filed elsewhere is the
-  least reliable, because nobody goes back to read it.
-- **A lesson that generalises goes in the vault**, phrased so it is useful on a different
-  project, with this one as the example.
-- **A dated narrative of what you did today goes in `git log`.** It is already there, in detail.
-
-Keep any one lesson in a single place. Two copies drift, and the drift is what causes wrong work
-later.
+Making docs TRUE rather than appending to them, and the one home each lesson gets, are
+user-level rules in `~/.claude/CLAUDE.md`. They were copied out into this file and have been cut
+back to this pointer, because two copies of a rule drift.

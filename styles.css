@@ -424,8 +424,9 @@ h2 {
   margin-bottom: 0.8rem;
   line-height: 1.8;
 }
-/* Every project reads the same way: a short lead, then 3 to 4 points.
-   Keep both when editing an entry; one without the other breaks the rhythm. */
+/* Every project entry reads the same way: a 33 to 48 word lead, then EXACTLY FOUR points.
+   Not three, not five. Keep both halves when editing an entry; one without the other breaks
+   the rhythm the other seven set. `python scripts/check_shape.py` is what enforces it. */
 .project-points {
   list-style: none;
   margin: 0 0 0.9rem;

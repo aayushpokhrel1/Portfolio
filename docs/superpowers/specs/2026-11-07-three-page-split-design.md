@@ -3,6 +3,11 @@
 Design, 2026-11-07. Decided with Aayush in conversation; this file is the record so the
 decisions are not only in a chat log.
 
+**What shipped: four pages, not three.** The compressed experience section this design called
+for turned out to be a page telling the reader to leave, so `experience.html` was added the
+same day. The rest of the design shipped as written. This file is left as the dated design it
+was; `CLAUDE.md` holds the current page map.
+
 ## Why
 
 The site had grown to 5,091 words, about 22 minutes of reading, in one `index.html`. The
