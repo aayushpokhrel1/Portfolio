@@ -32,6 +32,8 @@ The vault folder is `Projects/Portfolio/index.md` (decisions, gotchas, current s
 employers and coursework. Read it before editing `experience.html`; the resume PDF is the
 abridged version of it, and this repo holds no copy of either on purpose. **Three things in
 that profile stay out of the public site**: the phone number, the GPA, and per-course grades.
+Leaving the GPA off is Aayush's own decision (2026-11-08), asked and answered, not a default to
+revisit.
 It also holds internal job-search judgements (growth areas, honesty gates, employment status)
 that are decision-making notes, not site copy.
 
