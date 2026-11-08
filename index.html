@@ -1003,7 +1003,8 @@
             A senior design team project: real-time warehouse item tracking, built by
             integrating a TensorFlow image-recognition model with a Node.js REST API and a
             PostgreSQL schema with user authentication, alongside a Gazebo simulation routing
-            a robot between aisles over ROS2.
+            a robot between aisles over ROS2. About 4.6k lines across detector, API
+            and simulation.
           </p>
           <ul class="project-points">
             <li>
@@ -1134,7 +1135,7 @@
               sitting outside the global auth dependency.
             </li>
             <li>
-              105 tests across the backend and web client, with GitHub Actions CI on all three
+              108 tests across the backend and web client, with GitHub Actions CI on all three
               repositories.
             </li>
           </ul>
@@ -1161,10 +1162,10 @@
             </figure>
           </div>
           <p class="project-desc">
-            A private, multi-family recipe vault, live in production and in daily use. React
-            and TypeScript over Supabase, served by Cloudflare Workers: about 22.2k lines
-            across 221 files, 777 tests in 108 files, 46 Postgres migrations and four Edge
-            Functions, with CI on every push.
+            Two products and four clients on one codebase, live in production and in daily
+            use. React, React Native and TypeScript over Supabase, served by a single
+            Cloudflare Worker: about 54.9k lines, 1,638 tests in 198 files, 67 Postgres
+            migrations and four Edge Functions, with CI on every push.
           </p>
           <ul class="project-points">
             <li>
@@ -1186,10 +1187,11 @@
               an SPA.
             </li>
             <li>
-              <strong>A second product on the same foundation.</strong> A professional-kitchen
-              app (about 3.7k lines, built and awaiting DNS) walks a dish from development to a
-              site trial to the group menu. It lives in its own Postgres schema, and a seal test
-              fails the build if either app reaches into the other's data.
+              <strong>A second product, and a phone client.</strong> A kitchen app (about 4.8k
+              lines, live on its own subdomain) walks a dish from development to a site trial to
+              the group menu, and an Expo client (about 2.2k lines) adds offline recipes and
+              timers that ring while the phone is locked. A seal test fails the build if either
+              product reaches into the other's data.
             </li>
           </ul>
           <div class="project-tags">
@@ -1399,7 +1401,9 @@
               A zero-dependency Python CLI that offloads token-heavy grunt work from a paid
               Claude Code session to free or cheap models over any OpenAI-compatible endpoint.
               The worker reads, searches, and edits files but cannot run shell or git by design,
-              so every change is reviewed as a diff before commit.
+              so every change is reviewed as a diff before commit. About 3.6k lines with 80
+              pytest cases, and a benchmark in the repo that measures roughly 86% of the
+              orchestrator's tokens saved per task.
             </p>
             <div class="project-tags">
               <span>Python</span><span>CLI</span><span>LLMs</span><span>Claude Code</span>
@@ -1448,6 +1452,26 @@
         <div class="also-item">
           <span class="also-num">12</span>
           <div>
+            <h3 class="also-title">wipboard</h3>
+            <p class="also-desc">
+              A board for the repos you forgot about. Every other tracker asks you to type your
+              status in; this one reads it out of git, so it cannot be stale about activity:
+              branch, last commit, uncommitted and unpushed work are all derived on every run,
+              and the only field you ever type is which cycle a project is in. A zero-dependency
+              Python CLI, about 4k lines with 83 tests, plus an optional Cloudflare Worker that
+              publishes the board as a page. Pre-release, not yet on PyPI.
+            </p>
+            <div class="project-tags">
+              <span>Python</span><span>CLI</span><span>Git</span><span>Cloudflare Workers</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/aayushpokhrel1/wipboard" target="_blank" rel="noopener noreferrer">View code</a>
+            </div>
+          </div>
+        </div>
+        <div class="also-item">
+          <span class="also-num">13</span>
+          <div>
             <h3 class="also-title">Stock Price Prediction (LSTM)</h3>
             <p class="also-desc">
               An LSTM network forecasting Apple closing prices from 10+ years of historical
@@ -1490,8 +1514,9 @@
             Rather than keep tuning a model that was beating the wrong baseline, I
             retired it. The lesson I kept is that the baseline is the experiment. A
             well-calibrated model measured against an easy target tells you almost
-            nothing. I'm rebuilding now on cleaner data and grading every version
-            against the market from day one, not at the end.
+            nothing. I did not rebuild it either: the model is gone from the codebase,
+            and what shipped ranks legs on the de-vigged market price and states its own
+            negative expected value rather than claiming an edge it cannot show.
           </p>
         </div>
         <div class="note-tags">
@@ -1647,6 +1672,99 @@
           <span>Claude API</span><span>Vision</span><span>Human-in-the-loop</span>
         </div>
       </article>
+
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Chess Coach</span>
+        </div>
+        <h3 class="note-title">A 79% confidence that evaporated at 300 games</h3>
+        <div class="note-body">
+          <p>
+            Every evaluation term in the engine ships only if A/B self-play says it earns
+            its place, because my intuition about what helps a chess engine is not
+            trustworthy. A pawn-penalty term led at 79% likelihood of superiority over 100
+            games, which felt like a result. Over 300 independent games it came back at
+            49%: noise, dressed up by a small sample.
+          </p>
+          <p>
+            Two habits came out of that. Confirm a small-sample lead on a larger
+            independent run before believing it, and make sure the games are samples at
+            all: a fixed-depth search is deterministic, so self-play from the start
+            position replays one game many times instead of sampling many. Each game now
+            opens from a seeded random position, played from both colours. On those terms
+            the harness kept passed pawns (+31 Elo), rooks on open files (+24) and a
+            phased king table (+38), and rejected three plausible terms that never showed
+            a confident gain. Being able to say no is most of what it is for.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>A/B Testing</span><span>Statistics</span><span>C++</span>
+        </div>
+      </article>
+
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Delegation Pipeline</span>
+        </div>
+        <h3 class="note-title">The benchmark scored a broken run as its best result</h3>
+        <div class="note-body">
+          <p>
+            Delegation Pipeline measures what offloading a task saves as one minus the cost
+            of reviewing a worker's diff over the cost of doing the task inline. The runner
+            reviewed unconditionally, without first checking that the worker had succeeded.
+            A failed worker leaves an empty diff, an empty diff is cheap to review, and a
+            cheap review is a large saving. The single best number in one table, 90.4%, came
+            from a task where the worker emitted nothing at all, and the run published a
+            healthy 85.8% median while four of nine tasks had failed.
+          </p>
+          <p>
+            The shape worth looking for in any metric: does the failure path hand the
+            measurement a cheap, clean-looking input? If it does, the number improves as the
+            system degrades and looks best exactly when things are worst. The fix was to
+            score only completed work, publish the denominator, and have a test refuse an
+            unscored row rather than let a degraded run set the headline. The same session
+            nearly concluded the free model was too weak for the job, until I noticed the
+            failures were consecutive at the end of the run rather than scattered by task
+            difficulty. That is a quota draining, not a capability ceiling, and three of the
+            four passed on retry.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Benchmarking</span><span>Measurement</span><span>Python</span>
+        </div>
+      </article>
+
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · wipboard</span>
+        </div>
+        <h3 class="note-title">A redirect turned a rejected upload into a success</h3>
+        <div class="note-body">
+          <p>
+            I put a Cloudflare Access service token in front of wipboard's ingest endpoint,
+            and the uploader went on reporting success while no data arrived. An identity
+            proxy rejects an unauthenticated request with a 302 to a login page, not a 401.
+            Python's <code>urllib</code> follows redirects by default and rewrites the
+            redirected POST as a GET, so the client fetched the login page, got a 200, and
+            passed its own status-code check. The payload was never delivered and every
+            signal said it was.
+          </p>
+          <p>
+            On an unattended job that is worse than a crash: the data quietly stops and the
+            log fills with success lines. The check is one line and belongs in every
+            uploader, which is to compare the response's final URL against the one you asked
+            for, because no correct answer to an API POST is a redirect. It catches every
+            shape of redirect without turning redirects off. Two smaller rules came with it.
+            Print the origin and never the redirect URL, which carries a per-request token.
+            And refuse half a credential at startup: an id with no secret authenticates as
+            nothing, and the proxy answers with the same login redirect, a long way from the
+            real cause.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>HTTP</span><span>Cloudflare Access</span><span>Python</span>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -1689,7 +1807,10 @@
             observer.unobserve(e.target);
           }
         });
-      }, { threshold: 0.1 });
+      // threshold must stay 0: a ratio like 0.1 can NEVER be reached by a container
+      // taller than 10x the viewport (the Projects list), so that section stayed
+      // at opacity 0 forever. rootMargin does the "a bit past the edge" job instead.
+      }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
       fadeEls.forEach(el => observer.observe(el));
 
       // Nav goes transparent while the dark hero is in view, solid paper after.
