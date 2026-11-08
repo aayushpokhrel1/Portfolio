@@ -1523,7 +1523,40 @@
           <span>XGBoost</span><span>Backtesting</span><span>Calibration</span>
         </div>
       </article>
-
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Family Recipes</span>
+        </div>
+        <h3 class="note-title">The view had none of the security its table had</h3>
+        <div class="note-body">
+          <p>
+            Row-level security belongs to a table. A view over that table has none of its
+            own, and unless it is declared <code>security_invoker</code> it runs as its
+            owner, who is exempt from the table's policies. A view over a single table is
+            also auto-updatable, so Postgres will rewrite a write through it onto the table
+            underneath with the policies switched off. Mine exists so a stranger can see a
+            published cook's name, which is the whole point of it. Tested over HTTP with the
+            publishable key that ships in the browser bundle, a <code>PATCH</code> on
+            another cook's row returned 200 and changed it, and <code>DELETE</code> returned
+            204.
+          </p>
+          <p>
+            The privilege was in no migration. Mine granted select and nothing else; the
+            platform's default privileges granted the rest, because a view counts as a table
+            for that purpose, and the live ACL read <code>anon=arwdDxtm</code>. A privilege
+            nobody granted is still a privilege, and grepping your own migrations for
+            "grant" can never find one, so I read the live catalogue now instead. The
+            obvious fix was also the wrong one: <code>security_invoker</code> would make the
+            view answer under the caller's own policies and so return nothing to the
+            strangers it exists for. It stays a read, and every way to write through it is
+            gone. The rule I kept is to ask what has no policies at all, not only whether
+            the policies I wrote are correct.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>PostgreSQL</span><span>RLS</span><span>Security</span>
+        </div>
+      </article>
       <article class="note">
         <div class="note-meta">
           <span>Field log · UDRI</span>
@@ -1550,66 +1583,6 @@
           <span>NumPy</span><span>Vectorization</span><span>GPU</span><span>PyTorch</span>
         </div>
       </article>
-
-      <article class="note">
-        <div class="note-meta">
-          <span>Field log · Family Recipes</span>
-        </div>
-        <h3 class="note-title">Deleting a person and deleting their record are two operations</h3>
-        <div class="note-body">
-          <p>
-            I sat down to build a "delete my account" button and found it could never have
-            worked. Recipes pointed at a profile with no on-delete clause, and that profile
-            cascaded from the auth user, so removing a login tried to take the profile with it
-            and was refused by every recipe still referencing it. No amount of UI would have
-            fixed that; it failed in the database every time.
-          </p>
-          <p>
-            The obvious repair, a cascade, was the wrong one. A family vault exists so recipes
-            outlive the cook, and cascading would let one member leaving quietly rip recipes
-            out of a shared vault other people relied on. Instead I dropped the foreign key so
-            a profile outlives its auth user and becomes a durable authorship record, and the
-            delete flow blanks it first: the display name becomes "a former member", the avatar
-            and preferences clear. What stays behind carries no identity, and the recipe still
-            has an author to point at. The general lesson I took away is that when a row is an
-            identity and other people's data references it, deleting the identity and deleting
-            the record are different operations, and you should model them separately before
-            building the button.
-          </p>
-        </div>
-        <div class="note-tags">
-          <span>PostgreSQL</span><span>Data Modeling</span><span>RLS</span>
-        </div>
-      </article>
-
-      <article class="note">
-        <div class="note-meta">
-          <span>Field log · DNA data storage</span>
-        </div>
-        <h3 class="note-title">A benchmark number without its operating point isn't comparable</h3>
-        <div class="note-body">
-          <p>
-            Partway through the storage codec I re-centered the benchmark on a more realistic
-            payload size, and every headline number moved. The trouble was that the old numbers
-            had already been copied into a README, a research note, and a paper draft with no
-            record of the settings that produced them. One of them, "screening plus Reed-Solomon
-            dominates the frontier", had stopped being true at all: at the new operating point
-            screening plus fountain ties it exactly. I had been about to write a claim into a
-            manuscript that my own current data contradicted.
-          </p>
-          <p>
-            Two habits came out of it. Every figure now carries the parameters it was measured
-            at, because a density in bits per nucleotide means nothing without the payload size
-            and coverage behind it. And the operations doc carries a table mapping each number
-            in the paper to the command that reproduces it, since I also had a claim that was
-            true, measured, and quietly impossible to check without re-deriving it from scratch.
-          </p>
-        </div>
-        <div class="note-tags">
-          <span>Benchmarking</span><span>Reproducibility</span><span>Research</span>
-        </div>
-      </article>
-
       <article class="note">
         <div class="note-meta">
           <span>Field log · Budgerr</span>
@@ -1641,38 +1614,6 @@
           <span>FastAPI</span><span>API Keys</span><span>Security</span>
         </div>
       </article>
-
-      <article class="note">
-        <div class="note-meta">
-          <span>Field log · Budgerr</span>
-        </div>
-        <h3 class="note-title">Letting Claude read my bet slips, but not save them</h3>
-        <div class="note-body">
-          <p>
-            Logging a parlay by hand is tedious, so I added POST /bets/parse-slip.
-            You upload a screenshot of a sportsbook slip, the backend hands it to
-            Claude's vision model (claude-sonnet-5), and it comes back as structured
-            fields: the sportsbook, bet type, stake, payout, and for each leg the
-            player, stat, line, side, and odds. The part I care about is what it does
-            not do. Nothing gets saved. The parsed result pre-fills the quick-entry
-            form so I can read it, fix whatever the model misread, and submit it
-            myself. Until ANTHROPIC_API_KEY is set it just returns 501, so the feature
-            is inert by default rather than half-wired.
-          </p>
-          <p>
-            The interesting question with an LLM in a real workflow turned out to be
-            less "can it parse this" and more where I let it in and where I stop it.
-            Turning a screenshot into a reviewable draft is a good fit, because I
-            still sign off before anything touches the ledger. Letting a model's read
-            auto-write a money record would not be. That parse-then-review seam is
-            where I decided the AI's job ends and mine begins.
-          </p>
-        </div>
-        <div class="note-tags">
-          <span>Claude API</span><span>Vision</span><span>Human-in-the-loop</span>
-        </div>
-      </article>
-
       <article class="note">
         <div class="note-meta">
           <span>Field log · Chess Coach</span>
@@ -1701,7 +1642,36 @@
           <span>A/B Testing</span><span>Statistics</span><span>C++</span>
         </div>
       </article>
-
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Family Recipes</span>
+        </div>
+        <h3 class="note-title">Deleting a person and deleting their record are two operations</h3>
+        <div class="note-body">
+          <p>
+            I sat down to build a "delete my account" button and found it could never have
+            worked. Recipes pointed at a profile with no on-delete clause, and that profile
+            cascaded from the auth user, so removing a login tried to take the profile with it
+            and was refused by every recipe still referencing it. No amount of UI would have
+            fixed that; it failed in the database every time.
+          </p>
+          <p>
+            The obvious repair, a cascade, was the wrong one. A family vault exists so recipes
+            outlive the cook, and cascading would let one member leaving quietly rip recipes
+            out of a shared vault other people relied on. Instead I dropped the foreign key so
+            a profile outlives its auth user and becomes a durable authorship record, and the
+            delete flow blanks it first: the display name becomes "a former member", the avatar
+            and preferences clear. What stays behind carries no identity, and the recipe still
+            has an author to point at. The general lesson I took away is that when a row is an
+            identity and other people's data references it, deleting the identity and deleting
+            the record are different operations, and you should model them separately before
+            building the button.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>PostgreSQL</span><span>Data Modeling</span><span>RLS</span>
+        </div>
+      </article>
       <article class="note">
         <div class="note-meta">
           <span>Field log · Delegation Pipeline</span>
@@ -1733,7 +1703,66 @@
           <span>Benchmarking</span><span>Measurement</span><span>Python</span>
         </div>
       </article>
-
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Family Recipes</span>
+        </div>
+        <h3 class="note-title">An invite that outlived the person who sent it</h3>
+        <div class="note-body">
+          <p>
+            Creating an invite checked that the caller owned the organisation. Accepting one
+            checked nothing at all about the sender, and nothing expired: a column made each
+            code single-use, but none made it short-lived. So an owner who had been removed
+            from the organisation still employed whoever was holding their outstanding
+            links, at whatever role they had picked when they sent them, owner included.
+            Nothing was broken here, and every gate in that migration failed closed. A check
+            was simply missing.
+          </p>
+          <p>
+            It points the same way as the finding before it, where offboarding someone
+            increased their authority: when authority is withdrawn, ask what the person has
+            already handed out, not only what they can still do themselves. Three rules came
+            out of it. Re-check the issuer's standing at redemption, written as a positive
+            existence test so it refuses when standing cannot be proven rather than when it
+            can be disproven. Give everything issued a lifetime, because that table had a
+            select policy and no delete policy, so not even the sender could revoke a link
+            and expiry was the only control that existed. And redeeming must not consume
+            silently: the old path refused the write for someone already on staff, then
+            marked the code used and told the page they had joined, so an invite meant for a
+            new colleague could be eaten by anyone already employed.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Access Control</span><span>PostgreSQL</span><span>Security</span>
+        </div>
+      </article>
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · DNA data storage</span>
+        </div>
+        <h3 class="note-title">A benchmark number without its operating point isn't comparable</h3>
+        <div class="note-body">
+          <p>
+            Partway through the storage codec I re-centered the benchmark on a more realistic
+            payload size, and every headline number moved. The trouble was that the old numbers
+            had already been copied into a README, a research note, and a paper draft with no
+            record of the settings that produced them. One of them, "screening plus Reed-Solomon
+            dominates the frontier", had stopped being true at all: at the new operating point
+            screening plus fountain ties it exactly. I had been about to write a claim into a
+            manuscript that my own current data contradicted.
+          </p>
+          <p>
+            Two habits came out of it. Every figure now carries the parameters it was measured
+            at, because a density in bits per nucleotide means nothing without the payload size
+            and coverage behind it. And the operations doc carries a table mapping each number
+            in the paper to the command that reproduces it, since I also had a claim that was
+            true, measured, and quietly impossible to check without re-deriving it from scratch.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Benchmarking</span><span>Reproducibility</span><span>Research</span>
+        </div>
+      </article>
       <article class="note">
         <div class="note-meta">
           <span>Field log · wipboard</span>
@@ -1763,6 +1792,103 @@
         </div>
         <div class="note-tags">
           <span>HTTP</span><span>Cloudflare Access</span><span>Python</span>
+        </div>
+      </article>
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Family Recipes</span>
+        </div>
+        <h3 class="note-title">Three ways a page lied while 873 tests passed</h3>
+        <div class="note-body">
+          <p>
+            Walking one new feature as each of its four roles turned up three defects in an
+            hour, on code with 873 passing tests and a clean typecheck. Not one was a logic
+            error. A byline rendered a public name or else fell back to "A cook", which is
+            right for a home cook who never chose one, until a second product started
+            publishing through the same page: the byline then put "A cook" beside a
+            restaurant's name, attributing a venue's dish to a person who does not exist. A
+            default is an assertion about the domain, and every fallback has to be re-read as
+            a claim the moment a second caller appears.
+          </p>
+          <p>
+            The other two. The page said the sites were cooking version 1 and listed version
+            2's ingredients underneath, because the sentence and the list came from
+            different queries; one test covered the sentence, one covered the list, and
+            nothing checked that they agreed. That is worse than an ordinary wrong value,
+            because the sentence lends the wrong data its authority. And a dish taken down
+            still described itself as published, because the page asked whether a mapping row
+            existed, while that row is deliberately kept so re-publishing reuses the same URL
+            and the link already sent still works. If you keep a record for a reason other
+            than the state it used to imply, the state needs its own column. All three
+            surfaced the same way, by opening the page as the party with the least access.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Testing</span><span>Data Modeling</span><span>UX</span>
+        </div>
+      </article>
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Knowledge Pipeline</span>
+        </div>
+        <h3 class="note-title">The note that ran tmux</h3>
+        <div class="note-body">
+          <p>
+            I was appending a note to my Obsidian vault through a shell wrapper, the note
+            inline in a quoted heredoc. It failed, and the failure was not a quoting wart.
+            The transport re-quoted the wrapper, so my single quotes arrived as double quotes
+            (confirmed by reading the real command line back out of the process table) and
+            the body was expanded before heredoc semantics ever applied. Backticks in the
+            prose then executed: a sentence that mentioned <code>tmux attach</code> actually
+            ran tmux. An angle-bracketed placeholder parsed as a redirect, and an apostrophe
+            ended the quote and swallowed the rest of the line.
+          </p>
+          <p>
+            Note content is exactly the class of text that contains backticks, apostrophes,
+            angle brackets and command substitutions by nature, so any path that interpolates
+            captured text into a shell command is an arbitrary-code-execution path, and the
+            quoted heredoc you reach for is defeated by any layer that re-quotes on the way
+            across. The part worth keeping is that this rule was already written in three
+            separate documents and got violated anyway, because the failure mode is never
+            ignorance, it is not going back to read. So it is a tool now: it takes two paths
+            and no text, writes with the host interpreter and no shell at all, and its own
+            self-check appends prose full of backticks and apostrophes and asserts it lands
+            byte for byte. The fix to a quoting bug is usually to remove the parameter, not
+            to escape it better.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Security</span><span>Shell</span><span>Python</span>
+        </div>
+      </article>
+      <article class="note">
+        <div class="note-meta">
+          <span>Field log · Budgerr</span>
+        </div>
+        <h3 class="note-title">Letting Claude read my bet slips, but not save them</h3>
+        <div class="note-body">
+          <p>
+            Logging a parlay by hand is tedious, so I added POST /bets/parse-slip.
+            You upload a screenshot of a sportsbook slip, the backend hands it to
+            Claude's vision model (claude-sonnet-5), and it comes back as structured
+            fields: the sportsbook, bet type, stake, payout, and for each leg the
+            player, stat, line, side, and odds. The part I care about is what it does
+            not do. Nothing gets saved. The parsed result pre-fills the quick-entry
+            form so I can read it, fix whatever the model misread, and submit it
+            myself. Until ANTHROPIC_API_KEY is set it just returns 501, so the feature
+            is inert by default rather than half-wired.
+          </p>
+          <p>
+            The interesting question with an LLM in a real workflow turned out to be
+            less "can it parse this" and more where I let it in and where I stop it.
+            Turning a screenshot into a reviewable draft is a good fit, because I
+            still sign off before anything touches the ledger. Letting a model's read
+            auto-write a money record would not be. That parse-then-review seam is
+            where I decided the AI's job ends and mine begins.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Claude API</span><span>Vision</span><span>Human-in-the-loop</span>
         </div>
       </article>
     </div>
