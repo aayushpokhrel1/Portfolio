@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Field logs · Aayush Pokhrel</title>
+  <meta name="description" content="Thirteen field logs by Aayush Pokhrel: a retired model that beat the wrong baseline, a view with none of its table's row-level security, a benchmark that scored its own failures as its best result, and more."/>
+  <link rel="canonical" href="https://aayushpokhrel1.github.io/Portfolio/notes.html"/>
+
+  <!-- Icons & browser chrome -->
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
+  <meta name="theme-color" content="#1a1814"/>
+
+  <!-- Open Graph (LinkedIn, Slack, Facebook, iMessage) -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://aayushpokhrel1.github.io/Portfolio/notes.html"/>
+  <meta property="og:title" content="Field logs · Aayush Pokhrel"/>
+  <meta property="og:description" content="Thirteen field logs by Aayush Pokhrel: a retired model that beat the wrong baseline, a view with none of its table's row-level security, a benchmark that scored its own failures as its best result, and more."/>
+  <meta property="og:image" content="https://aayushpokhrel1.github.io/Portfolio/assets/og-image.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="Aayush Pokhrel · CS & AI portfolio. Machine Learning, Data, Software. Open to full-time roles, Cincinnati, OH."/>
+  <meta property="og:site_name" content="Aayush Pokhrel"/>
+
+  <!-- Twitter / X card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Field logs · Aayush Pokhrel"/>
+  <meta name="twitter:description" content="Thirteen field logs by Aayush Pokhrel: a retired model that beat the wrong baseline, a view with none of its table's row-level security, a benchmark that scored its own failures as its best result, and more."/>
+  <meta name="twitter:image" content="https://aayushpokhrel1.github.io/Portfolio/assets/og-image.png"/>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Aayush Pokhrel",
+    "url": "https://aayushpokhrel1.github.io/Portfolio/",
+    "jobTitle": "Machine Learning & Software Engineer",
+    "email": "mailto:aayus.pok@gmail.com",
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "University of Cincinnati"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Cincinnati",
+      "addressRegion": "OH",
+      "addressCountry": "US"
+    },
+    "knowsAbout": [
+      "Machine Learning",
+      "Data Engineering",
+      "Autonomous Systems",
+      "Computer Vision",
+      "Software Engineering"
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/in/aayush-pokhrel-dev/",
+      "https://github.com/aayushpokhrel1"
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="styles.css"/>
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+  <a class="skip-link" href="#notes">Skip to content</a>
+
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <nav>
+    <div class="container">
+      <a class="nav-logo" href="index.html" aria-label="Aayush Pokhrel, home">AP</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
+      <ul class="nav-links" id="nav-menu">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#experience">Experience</a></li>
+        <li><a href="work.html">Projects</a></li>
+        <li><a href="notes.html" aria-current="page">Notes</a></li>
+        <li><a href="assets/Pokhrel_Aayush_Resume_2026.pdf" target="_blank" rel="noopener">Resume</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+<section id="notes">
+    <div class="container fade-in">
+      <h2 class="section-label"><span>Notes</span></h2>
+      <p class="section-lead">
+        Thirteen working logs from the <a href="work.html">projects</a>: decisions,
+        postmortems, and the things I changed my mind about. Each one is a mistake or a
+        reversal I can show the receipt for.
+      </p>
+      <p class="notes-intro">
+        Working logs from the projects above: decisions, postmortems, and the
+        things I changed my mind about.
+      </p>
+
+      <article class="note" id="why-i-retired-a-model-that">
+        <div class="note-meta">
+          <span>Field log · Playstat</span>
+        </div>
+        <h3 class="note-title">Why I retired a model that worked in the notebook</h3>
+        <div class="note-body">
+          <p>
+            The Playstat model backtested well in isolation and still lost to the
+            market. I had an XGBoost stack with negative-binomial output
+            distributions and conformal calibration, and on paper the prediction
+            intervals looked honest. But when I graded it against de-vigged market
+            lines instead of raw outcomes, the edge mostly disappeared: the market
+            was already pricing in what my features thought they had discovered.
+          </p>
+          <p>
+            Rather than keep tuning a model that was beating the wrong baseline, I
+            retired it. The lesson I kept is that the baseline is the experiment. A
+            well-calibrated model measured against an easy target tells you almost
+            nothing. I did not rebuild it either: the model is gone from the codebase,
+            and what shipped ranks legs on the de-vigged market price and states its own
+            negative expected value rather than claiming an edge it cannot show.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>XGBoost</span><span>Backtesting</span><span>Calibration</span>
+        </div>
+      </article>
+      <article class="note" id="the-view-had-none-of-the">
+        <div class="note-meta">
+          <span>Field log · Family Recipes</span>
+        </div>
+        <h3 class="note-title">The view had none of the security its table had</h3>
+        <div class="note-body">
+          <p>
+            Row-level security belongs to a table. A view over that table has none of its
+            own, and unless it is declared <code>security_invoker</code> it runs as its
+            owner, who is exempt from the table's policies. A view over a single table is
+            also auto-updatable, so Postgres will rewrite a write through it onto the table
+            underneath with the policies switched off. Mine exists so a stranger can see a
+            published cook's name, which is the whole point of it. Tested over HTTP with the
+            publishable key that ships in the browser bundle, a <code>PATCH</code> on
+            another cook's row returned 200 and changed it, and <code>DELETE</code> returned
+            204.
+          </p>
+          <p>
+            The privilege was in no migration. Mine granted select and nothing else; the
+            platform's default privileges granted the rest, because a view counts as a table
+            for that purpose, and the live ACL read <code>anon=arwdDxtm</code>. A privilege
+            nobody granted is still a privilege, and grepping your own migrations for
+            "grant" can never find one, so I read the live catalogue now instead. The
+            obvious fix was also the wrong one: <code>security_invoker</code> would make the
+            view answer under the caller's own policies and so return nothing to the
+            strangers it exists for. It stays a read, and every way to write through it is
+            gone. The rule I kept is to ask what has no policies at all, not only whether
+            the policies I wrote are correct.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>PostgreSQL</span><span>RLS</span><span>Security</span>
+        </div>
+      </article>
+      <article class="note" id="cutting-a-quantum-simulation-from-48">
+        <div class="note-meta">
+          <span>Field log · UDRI</span>
+        </div>
+        <h3 class="note-title">Cutting a quantum simulation from 48 hours to 5</h3>
+        <div class="note-body">
+          <p>
+            The first working version of the DNA quantum simulation took about 48
+            hours per run. With 100-plus runs planned, that was a non-starter. The
+            naive Schrödinger solver spent most of its time in tight per-element
+            loops and an integrator taking far smaller steps than the dynamics
+            actually needed.
+          </p>
+          <p>
+            Four changes got it to roughly five hours: vectorizing the state updates
+            so NumPy worked in batches, swapping in an integration method that stays
+            stable at larger steps, moving the heavy linear algebra onto the GPU, and
+            parallelizing across runs. Later I trained PyTorch surrogate models to
+            approximate the dynamics outright, so parameter sweeps no longer needed
+            the full solver at all.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>NumPy</span><span>GPU</span><span>PyTorch</span>
+        </div>
+      </article>
+      <article class="note" id="the-auth-bypass-hiding-in-fastapi">
+        <div class="note-meta">
+          <span>Field log · Budgerr</span>
+        </div>
+        <h3 class="note-title">The auth bypass hiding in FastAPI's own docs</h3>
+        <div class="note-body">
+          <p>
+            Budgerr's API sits behind a single global X-API-Key dependency, so I
+            assumed every route needed the key. It didn't. FastAPI builds its own
+            /docs, /openapi.json, and /redoc routes, and because the framework adds
+            them itself, my app-level dependency never saw them: anyone could pull
+            the full API schema, the exact shape of every endpoint, with no key at
+            all. It stayed harmless only because the API wasn't public yet, and I
+            caught it during deploy prep. The fix was to construct the app with
+            docs_url, redoc_url, and openapi_url set to None, then re-add those three
+            as ordinary key-gated routes, leaving /health as the one deliberate
+            exempt path so container and systemd healthchecks still pass.
+          </p>
+          <p>
+            What got me was how reasonable the wrong assumption felt: I wrote one
+            global dependency and trusted the word global. The lesson I kept is that
+            it only guards the routes your code registers, not the ones the framework
+            generates for you, so global auth is only as global as the surfaces your
+            check can actually see. Now I probe a supposedly locked API with an
+            unauthenticated request to every surface, including the ones I never wrote.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>FastAPI</span><span>API Keys</span><span>Security</span>
+        </div>
+      </article>
+      <article class="note" id="a-79-confidence-that-evaporated-at">
+        <div class="note-meta">
+          <span>Field log · Chess Coach</span>
+        </div>
+        <h3 class="note-title">A 79% confidence that evaporated at 300 games</h3>
+        <div class="note-body">
+          <p>
+            Every evaluation term in the engine ships only if A/B self-play says it earns
+            its place, because my intuition about what helps a chess engine is not
+            trustworthy. A pawn-penalty term led at 79% likelihood of superiority over 100
+            games, which felt like a result. Over 300 independent games it came back at
+            49%: noise, dressed up by a small sample.
+          </p>
+          <p>
+            Two habits came out of that. Confirm a small-sample lead on a larger
+            independent run before believing it, and make sure the games are samples at
+            all: a fixed-depth search is deterministic, so self-play from the start
+            position replays one game many times instead of sampling many. Each game now
+            opens from a seeded random position, played from both colours. On those terms
+            the harness kept passed pawns (+31 Elo), rooks on open files (+24) and a
+            phased king table (+38), and rejected three plausible terms that never showed
+            a confident gain. Being able to say no is most of what it is for.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>A/B Testing</span><span>Statistics</span><span>C++</span>
+        </div>
+      </article>
+      <article class="note" id="deleting-a-person-and-deleting-their">
+        <div class="note-meta">
+          <span>Field log · Family Recipes</span>
+        </div>
+        <h3 class="note-title">Deleting a person and deleting their record are two operations</h3>
+        <div class="note-body">
+          <p>
+            I sat down to build a "delete my account" button and found it could never have
+            worked. Recipes pointed at a profile with no on-delete clause, and that profile
+            cascaded from the auth user, so removing a login tried to take the profile with it
+            and was refused by every recipe still referencing it. No amount of UI would have
+            fixed that; it failed in the database every time.
+          </p>
+          <p>
+            The obvious repair, a cascade, was the wrong one. A family vault exists so recipes
+            outlive the cook, and cascading would let one member leaving quietly rip recipes
+            out of a shared vault other people relied on. Instead I dropped the foreign key so
+            a profile outlives its auth user and becomes a durable authorship record, and the
+            delete flow blanks it first: the display name becomes "a former member", the avatar
+            and preferences clear. What stays behind carries no identity, and the recipe still
+            has an author to point at. The general lesson I took away is that when a row is an
+            identity and other people's data references it, deleting the identity and deleting
+            the record are different operations, and you should model them separately before
+            building the button.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>PostgreSQL</span><span>Data Modeling</span><span>RLS</span>
+        </div>
+      </article>
+      <article class="note" id="the-benchmark-scored-a-broken-run">
+        <div class="note-meta">
+          <span>Field log · Delegation Pipeline</span>
+        </div>
+        <h3 class="note-title">The benchmark scored a broken run as its best result</h3>
+        <div class="note-body">
+          <p>
+            Delegation Pipeline measures what offloading a task saves as one minus the cost
+            of reviewing a worker's diff over the cost of doing the task inline. The runner
+            reviewed unconditionally, without first checking that the worker had succeeded.
+            A failed worker leaves an empty diff, an empty diff is cheap to review, and a
+            cheap review is a large saving. The single best number in one table, 90.4%, came
+            from a task where the worker emitted nothing at all, and the run published a
+            healthy 85.8% median while four of nine tasks had failed.
+          </p>
+          <p>
+            The shape worth looking for in any metric: does the failure path hand the
+            measurement a cheap, clean-looking input? If it does, the number improves as the
+            system degrades and looks best exactly when things are worst. The fix was to
+            score only completed work, publish the denominator, and have a test refuse an
+            unscored row rather than let a degraded run set the headline. The same session
+            nearly concluded the free model was too weak for the job, until I noticed the
+            failures were consecutive at the end of the run rather than scattered by task
+            difficulty. That is a quota draining, not a capability ceiling, and three of the
+            four passed on retry.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Benchmarking</span><span>Measurement</span><span>Python</span>
+        </div>
+      </article>
+      <article class="note" id="an-invite-that-outlived-the-person">
+        <div class="note-meta">
+          <span>Field log · Family Recipes</span>
+        </div>
+        <h3 class="note-title">An invite that outlived the person who sent it</h3>
+        <div class="note-body">
+          <p>
+            Creating an invite checked that the caller owned the organisation. Accepting one
+            checked nothing at all about the sender, and nothing expired: a column made each
+            code single-use, but none made it short-lived. So an owner who had been removed
+            from the organisation still employed whoever was holding their outstanding
+            links, at whatever role they had picked when they sent them, owner included.
+            Nothing was broken here, and every gate in that migration failed closed. A check
+            was simply missing.
+          </p>
+          <p>
+            It points the same way as the finding before it, where offboarding someone
+            increased their authority: when authority is withdrawn, ask what the person has
+            already handed out, not only what they can still do themselves. Three rules came
+            out of it. Re-check the issuer's standing at redemption, written as a positive
+            existence test so it refuses when standing cannot be proven rather than when it
+            can be disproven. Give everything issued a lifetime, because that table had a
+            select policy and no delete policy, so not even the sender could revoke a link
+            and expiry was the only control that existed. And redeeming must not consume
+            silently: the old path refused the write for someone already on staff, then
+            marked the code used and told the page they had joined, so an invite meant for a
+            new colleague could be eaten by anyone already employed.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Access Control</span><span>PostgreSQL</span><span>Security</span>
+        </div>
+      </article>
+      <article class="note" id="a-benchmark-number-without-its-operating">
+        <div class="note-meta">
+          <span>Field log · DNA data storage</span>
+        </div>
+        <h3 class="note-title">A benchmark number without its operating point isn't comparable</h3>
+        <div class="note-body">
+          <p>
+            Partway through the storage codec I re-centered the benchmark on a more realistic
+            payload size, and every headline number moved. The trouble was that the old numbers
+            had already been copied into a README, a research note, and a paper draft with no
+            record of the settings that produced them. One of them, "screening plus Reed-Solomon
+            dominates the frontier", had stopped being true at all: at the new operating point
+            screening plus fountain ties it exactly. I had been about to write a claim into a
+            manuscript that my own current data contradicted.
+          </p>
+          <p>
+            Two habits came out of it. Every figure now carries the parameters it was measured
+            at, because a density in bits per nucleotide means nothing without the payload size
+            and coverage behind it. And the operations doc carries a table mapping each number
+            in the paper to the command that reproduces it, since I also had a claim that was
+            true, measured, and quietly impossible to check without re-deriving it from scratch.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Benchmarking</span><span>Reproducibility</span><span>Research</span>
+        </div>
+      </article>
+      <article class="note" id="a-redirect-turned-a-rejected-upload">
+        <div class="note-meta">
+          <span>Field log · wipboard</span>
+        </div>
+        <h3 class="note-title">A redirect turned a rejected upload into a success</h3>
+        <div class="note-body">
+          <p>
+            I put a Cloudflare Access service token in front of wipboard's ingest endpoint,
+            and the uploader went on reporting success while no data arrived. An identity
+            proxy rejects an unauthenticated request with a 302 to a login page, not a 401.
+            Python's <code>urllib</code> follows redirects by default and rewrites the
+            redirected POST as a GET, so the client fetched the login page, got a 200, and
+            passed its own status-code check. The payload was never delivered and every
+            signal said it was.
+          </p>
+          <p>
+            On an unattended job that is worse than a crash: the data quietly stops and the
+            log fills with success lines. The check is one line and belongs in every
+            uploader, which is to compare the response's final URL against the one you asked
+            for, because no correct answer to an API POST is a redirect. It catches every
+            shape of redirect without turning redirects off. Two smaller rules came with it.
+            Print the origin and never the redirect URL, which carries a per-request token.
+            And refuse half a credential at startup: an id with no secret authenticates as
+            nothing, and the proxy answers with the same login redirect, a long way from the
+            real cause.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>HTTP</span><span>Cloudflare Access</span><span>Python</span>
+        </div>
+      </article>
+      <article class="note" id="three-ways-a-page-lied-while">
+        <div class="note-meta">
+          <span>Field log · Family Recipes</span>
+        </div>
+        <h3 class="note-title">Three ways a page lied while 873 tests passed</h3>
+        <div class="note-body">
+          <p>
+            Walking one new feature as each of its four roles turned up three defects in an
+            hour, on code with 873 passing tests and a clean typecheck. Not one was a logic
+            error. A byline rendered a public name or else fell back to "A cook", which is
+            right for a home cook who never chose one, until a second product started
+            publishing through the same page: the byline then put "A cook" beside a
+            restaurant's name, attributing a venue's dish to a person who does not exist. A
+            default is an assertion about the domain, and every fallback has to be re-read as
+            a claim the moment a second caller appears.
+          </p>
+          <p>
+            The other two. The page said the sites were cooking version 1 and listed version
+            2's ingredients underneath, because the sentence and the list came from
+            different queries; one test covered the sentence, one covered the list, and
+            nothing checked that they agreed. That is worse than an ordinary wrong value,
+            because the sentence lends the wrong data its authority. And a dish taken down
+            still described itself as published, because the page asked whether a mapping row
+            existed, while that row is deliberately kept so re-publishing reuses the same URL
+            and the link already sent still works. If you keep a record for a reason other
+            than the state it used to imply, the state needs its own column. All three
+            surfaced the same way, by opening the page as the party with the least access.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Testing</span><span>Data Modeling</span><span>UX</span>
+        </div>
+      </article>
+      <article class="note" id="the-note-that-ran-tmux">
+        <div class="note-meta">
+          <span>Field log · Knowledge Pipeline</span>
+        </div>
+        <h3 class="note-title">The note that ran tmux</h3>
+        <div class="note-body">
+          <p>
+            I was appending a note to my Obsidian vault through a shell wrapper, the note
+            inline in a quoted heredoc. It failed, and the failure was not a quoting wart.
+            The transport re-quoted the wrapper, so my single quotes arrived as double quotes
+            (confirmed by reading the real command line back out of the process table) and
+            the body was expanded before heredoc semantics ever applied. Backticks in the
+            prose then executed: a sentence that mentioned <code>tmux attach</code> actually
+            ran tmux. An angle-bracketed placeholder parsed as a redirect, and an apostrophe
+            ended the quote and swallowed the rest of the line.
+          </p>
+          <p>
+            Note content is exactly the class of text that contains backticks, apostrophes,
+            angle brackets and command substitutions by nature, so any path that interpolates
+            captured text into a shell command is an arbitrary-code-execution path, and the
+            quoted heredoc you reach for is defeated by any layer that re-quotes on the way
+            across. The part worth keeping is that this rule was already written in three
+            separate documents and got violated anyway, because the failure mode is never
+            ignorance, it is not going back to read. So it is a tool now: it takes two paths
+            and no text, writes with the host interpreter and no shell at all, and its own
+            self-check appends prose full of backticks and apostrophes and asserts it lands
+            byte for byte. The fix to a quoting bug is usually to remove the parameter, not
+            to escape it better.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Security</span><span>Shell</span><span>Python</span>
+        </div>
+      </article>
+      <article class="note" id="letting-claude-read-my-bet-slips">
+        <div class="note-meta">
+          <span>Field log · Budgerr</span>
+        </div>
+        <h3 class="note-title">Letting Claude read my bet slips, but not save them</h3>
+        <div class="note-body">
+          <p>
+            Logging a parlay by hand is tedious, so I added POST /bets/parse-slip.
+            You upload a screenshot of a sportsbook slip, the backend hands it to
+            Claude's vision model (claude-sonnet-5), and it comes back as structured
+            fields: the sportsbook, bet type, stake, payout, and for each leg the
+            player, stat, line, side, and odds. The part I care about is what it does
+            not do. Nothing gets saved. The parsed result pre-fills the quick-entry
+            form so I can read it, fix whatever the model misread, and submit it
+            myself. Until ANTHROPIC_API_KEY is set it just returns 501, so the feature
+            is inert by default rather than half-wired.
+          </p>
+          <p>
+            The interesting question with an LLM in a real workflow turned out to be
+            less "can it parse this" and more where I let it in and where I stop it.
+            Turning a screenshot into a reviewable draft is a good fit, because I
+            still sign off before anything touches the ledger. Letting a model's read
+            auto-write a money record would not be. That parse-then-review seam is
+            where I decided the AI's job ends and mine begins.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>Claude API</span><span>Vision</span><span>Human-in-the-loop</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <span>© 2026 Aayush Pokhrel · Cincinnati, OH</span>
+      <a class="footer-link" href="#hero">Back to top</a>
+    </div>
+  </footer>
+
+
+  <script src="site.js"></script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="9f197a0c-7d25-4559-93ac-2104de43bb57"></script>
+
+</body>
+</html>

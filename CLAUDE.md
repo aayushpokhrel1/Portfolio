@@ -7,7 +7,15 @@ Personal portfolio site.
 | File | What it holds |
 | --- | --- |
 | `README.md` | What it is and how to run it |
-| `index.html` | The entire site: markup, CSS, and JS in one file. There is no build step and no other source file. |
+| `index.html` | The way in: the hero's claim, a compressed about and experience, 13 project cards, the 13 field log titles, contact. About 1,100 words. |
+| `work.html` | The 8 full project entries (lead, four points, gallery, tags) and the 5 compact "Also" entries. |
+| `notes.html` | The 13 field logs in full. |
+| `styles.css` | All CSS for all three pages. **One copy on purpose**: three inline copies drift, and drift is what causes wrong work. |
+| `site.js` | All JS for all three pages: the reveal, the nav drawer, the lightbox, the scroll spy, the copy button. Same reason. |
+| `docs/superpowers/specs/` | The design of a change, written before building it. The three-page split is `2026-11-07-three-page-split-design.md`. |
+
+Still no build step and no package manager. Three hand-authored pages, one stylesheet, one
+script, served as files.
 
 The vault folder is `Projects/Portfolio/index.md` (decisions, gotchas, current state of the site).
 
@@ -25,14 +33,18 @@ newest work last. The same goes for length: entries drifted to an 8x spread (55 
 simply because some were revised and others were not, and the short ones read as the smaller
 projects.
 
-**The shape is fixed: a lead of 33 to 48 words, then exactly four `<li>` points, then six
-tags.** The CSS for the points carries the same warning. Keep both halves when you edit an
-entry, since a lead without points, or five points, breaks the rhythm the other seven set.
-Check it mechanically rather than by eye:
+**An entry in `work.html` is fixed: a lead of 33 to 48 words, then exactly four `<li>`
+points, then six tags.** The CSS for the points carries the same warning. Keep both halves
+when you edit an entry, since a lead without points, or five points, breaks the rhythm the
+other seven set.
 
-```
-python -c "import io,re,html; s=io.open('index.html',encoding='utf-8').read(); w=s[s.index('<section id=\"work\"'):s.index('<section id=\"notes\"')]; [print(m.group(1), len(html.unescape(re.sub(r'<[^>]+>','',re.search(r'<p class=\"project-desc\">(.*?)</p>',m.group(3),re.S).group(1))).split()), len(re.findall(r'<li>',m.group(3)))) for m in re.finditer(r'<span class=\"project-num\">(\d+)</span>.*?<h3 class=\"project-title\">(.*?)</h3>(.*?)(?=<div class=\"project\">|<div class=\"also\">)', w, re.S)]"
-```
+**A card in `index.html` is one line of 12 to 24 words plus at least one measured figure.**
+The figure is the point of the card: a card without one turns the index into a link farm,
+which is the failure the three-page split was most at risk of. **A field log is two
+paragraphs and three tags**, and the index lists titles only.
+
+Check all of it mechanically rather than by eye. `python scripts/check_shape.py` prints every
+entry, card and log with its counts and exits non-zero on a violation.
 
 **Re-read the project's README before rewriting its entry, not just its file counts.** Twice
 now a project had become a different thing than the site claimed: Playstat's prediction model

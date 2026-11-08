@@ -1,0 +1,877 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f7f5f0;
+  --bg-2: #efece4;
+  --ink: #1a1814;
+  --muted: #726d67;
+  --accent: #2a5c45;
+  --accent-light: #7cc4a0;
+  --rule: #ddd9d2;
+  --mono: 'DM Mono', monospace;
+  --serif: 'DM Serif Display', Georgia, serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-inline: max(2rem, env(safe-area-inset-left)) max(2rem, env(safe-area-inset-right));
+}
+
+/* Browser surfaces themed from the palette, not left at engine defaults. */
+::selection { background: var(--accent); color: var(--bg); }
+html { caret-color: var(--accent); }
+
+/* ── Accessibility ── */
+a:focus-visible,
+.btn:focus-visible,
+.nav-toggle:focus-visible,
+.contact-copy:focus-visible,
+.nav-links a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: -3.5rem;
+  z-index: 200;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.9rem;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0.6rem; }
+
+/* ── Scroll progress (a forest thread that fills as you read) ── */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  z-index: 101;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ── Nav ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(247,245,240,0.88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 52px;
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  position: relative;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+/* "You are here": the current section's link carries a forest thread. */
+.nav-links a.active { color: var(--ink); }
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--accent);
+}
+nav.nav--hero .nav-links a.active { color: var(--bg); }
+nav.nav--hero .nav-links a.active::after { background: var(--accent-light); }
+/* Nav adapts over the dark hero; JS toggles .nav--hero. Default (JS off) stays legible paper. */
+/* Over the dark hero, the bar takes a translucent-ink blur (the dark twin of
+   the paper nav) so hero text passes cleanly under it instead of overlapping. */
+nav.nav--hero {
+  background: rgba(26,24,20,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom-color: rgba(247,245,240,0.1);
+}
+nav.nav--hero .nav-logo { color: var(--bg); }
+nav.nav--hero .nav-links a { color: rgba(247,245,240,0.65); }
+nav.nav--hero .nav-links a:hover { color: var(--bg); }
+
+/* Menu toggle: hidden on pointer-comfortable widths, shown as the mobile control. */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.35rem 0.85rem;
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-toggle:hover { color: var(--ink); border-color: var(--ink); }
+nav.nav--hero .nav-toggle { color: var(--bg); border-color: rgba(247,245,240,0.4); }
+nav.nav--hero .nav-toggle:hover { border-color: var(--bg); }
+
+@media (max-width: 600px) {
+  .nav-toggle { display: inline-flex; }
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.4rem 0 0.6rem;
+    background: rgba(247,245,240,0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+    display: none;
+  }
+  nav.menu-open .nav-links { display: flex; }
+  .nav-links li { width: 100%; }
+  /* Drawer sits on paper regardless of hero state, so links keep paper-surface colors. */
+  nav.nav--hero .nav-links a,
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 max(2rem, env(safe-area-inset-left));
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+  }
+  .nav-links li:first-child a { border-top: none; }
+  nav.nav--hero .nav-links a:hover,
+  .nav-links a:hover { color: var(--ink); }
+  /* Drawer rows already carry hairlines; drop the underline tick here. */
+  .nav-links a.active::after { display: none; }
+  .nav-links a.active { color: var(--ink); }
+}
+
+/* ── Hero (dark peak) ── */
+#hero {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 168px 0 108px;
+}
+@media (max-width: 580px) { #hero { padding: 116px 0 68px; } }
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(3.4rem, 12vw, 6rem);
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.8rem;
+}
+h1 em { font-style: italic; color: var(--accent-light); }
+/* Field-notebook spec strip: the hero's grounding index card. */
+.hero-spec {
+  margin-top: 3.2rem;
+  padding-top: 1.7rem;
+  border-top: 1px solid rgba(247,245,240,0.18);
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  justify-content: start;
+  gap: 1.5rem 2.8rem;
+}
+.hero-spec > div { display: flex; flex-direction: column; gap: 0.4rem; }
+.hero-spec dt {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+.hero-spec dd {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: rgba(247,245,240,0.82);
+}
+@media (max-width: 580px) {
+  .hero-spec { grid-template-columns: 1fr 1fr; gap: 1.3rem 1.5rem; margin-top: 2.6rem; }
+}
+.hero-sub {
+  font-size: 15px;
+  color: rgba(247,245,240,0.72);
+  max-width: 480px;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+/* Buttons invert on the dark hero surface */
+#hero .btn { border-color: var(--bg); color: var(--bg); }
+#hero .btn:hover { background: var(--bg); color: var(--ink); }
+#hero .btn-ghost { border-color: rgba(247,245,240,0.28); color: rgba(247,245,240,0.72); }
+#hero .btn-ghost:hover { border-color: var(--bg); background: transparent; color: var(--bg); }
+.hero-cta {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  transition: background 0.2s, color 0.2s;
+}
+.btn:hover { background: var(--ink); color: var(--bg); }
+.btn-ghost { border-color: var(--rule); color: var(--muted); }
+.btn-ghost:hover { border-color: var(--ink); background: transparent; color: var(--ink); }
+
+/* ── Section shared ── */
+section {
+  padding: 72px 0;
+  border-bottom: 1px solid var(--rule);
+}
+/* Tonal banding: alternating sections sit on a slightly deeper paper tone,
+   so the long scroll has rhythm without leaving the one warm family. */
+#experience, #notes { background: var(--bg-2); }
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 3rem;
+}
+/* A short forest tick leads the label; a longer forest rule continues after it. */
+/* Header: a short leading tick, then a filled forest box (paper text),
+   then a rule that continues to the edge. */
+.section-label::before {
+  content: '';
+  width: 1.8rem;
+  height: 2px;
+  background: var(--accent);
+  flex: none;
+}
+.section-label > span {
+  background: var(--accent);
+  color: var(--bg);
+  padding: 0.22em 0.6em;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: var(--accent);
+}
+h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+/* ── About ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+@media (max-width: 580px) { .about-grid { grid-template-columns: 1fr; gap: 2rem; } }
+.about-text p { color: var(--muted); margin-bottom: 1rem; }
+.skills-group { margin-bottom: 1.4rem; }
+.skills-group-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.skills-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.skills-list li {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+}
+
+/* ── Experience ── */
+.exp {
+  padding: 2rem 0;
+  border-top: 1px solid var(--rule);
+}
+.exp:first-of-type { border-top: none; }
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.3rem;
+}
+.exp-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+}
+.exp-date {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.exp-company {
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.8rem;
+}
+.exp-bullets { list-style: none; }
+.exp-bullets li {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+  padding-left: 1.2rem;
+  position: relative;
+  margin-bottom: 0.3rem;
+}
+.exp-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 0.55rem;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* ── Projects ── */
+.project {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 0 1.5rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--rule);
+  align-items: start;
+}
+.project:first-of-type { border-top: none; }
+.project-num { font-size: 11px; color: var(--muted); padding-top: 3px; }
+.project-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin-bottom: 0.4rem;
+}
+.project-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+  line-height: 1.8;
+}
+/* Every project reads the same way: a short lead, then 3 to 4 points.
+   Keep both when editing an entry; one without the other breaks the rhythm. */
+.project-points {
+  list-style: none;
+  margin: 0 0 0.9rem;
+  padding: 0;
+}
+.project-points li {
+  position: relative;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.75;
+  padding-left: 1.1rem;
+  margin-bottom: 0.45rem;
+}
+.project-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 5px;
+  height: 1px;
+  background: var(--accent);
+}
+.project-points li:last-child { margin-bottom: 0; }
+.project-points strong { color: var(--ink); font-weight: 500; }
+.project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.project-tags span {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(42,92,69,0.3);
+  padding: 0.2rem 0.6rem;
+}
+.project-links {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin-top: 0.9rem;
+}
+.project-links a {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 2px;
+  transition: border-color 0.2s;
+}
+.project-links a:hover { border-color: var(--ink); }
+.project-note {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.project-gallery {
+  margin: 0.2rem 0 1.3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+/* A gallery with one shot spans the full column instead of leaving a gap. */
+.project-gallery:has(> :only-child) { grid-template-columns: 1fr; }
+@media (max-width: 580px) { .project-gallery { grid-template-columns: 1fr; } }
+.project-shot {
+  border: 1px solid var(--rule);
+  background: #ffffff;
+  padding: 0.4rem;
+  margin: 0;
+}
+.project-shot img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  height: auto;
+  object-fit: cover;
+  object-position: top;
+  background: var(--rule);
+}
+.project-shot figcaption {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.5rem 0.1rem 0.05rem;
+  line-height: 1.4;
+}
+.project-shot .shot-link {
+  display: block;
+  cursor: zoom-in;
+  position: relative;
+  overflow: hidden;
+}
+.project-shot { transition: border-color 0.2s; }
+.project-shot:hover { border-color: var(--muted); }
+.project-shot .shot-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* Tactile zoom cue on hover-capable pointers only. */
+@media (hover: hover) {
+  .project-shot .shot-link img { transition: transform 0.45s ease; }
+  .project-shot:hover .shot-link img { transform: scale(1.035); }
+}
+/* Let the work breathe past the reading column on wide screens (editorial figure bleed). */
+@media (min-width: 980px) {
+  .project-gallery { margin-right: -6.5rem; }
+}
+/* Click-to-enlarge lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 5vmin;
+  background: rgba(20,18,15,0.92);
+  backdrop-filter: blur(4px);
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 92vw;
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  background: #fff;
+  border: 1px solid rgba(247,245,240,0.15);
+}
+.lightbox-close {
+  position: fixed;
+  top: 1.2rem;
+  right: 1.2rem;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: transparent;
+  border: 1px solid rgba(247,245,240,0.4);
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.lightbox-close:hover { border-color: var(--bg); background: rgba(247,245,240,0.12); }
+/* ── Also (secondary work) ── */
+.also {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+}
+.also-label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+}
+.also-item {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 0 1.5rem;
+  align-items: baseline;
+}
+.also-title {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+.also-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.75;
+  margin: 0.25rem 0 0.7rem;
+}
+.also-num { font-size: 11px; color: var(--muted); }
+
+/* ── Notes (field log) ── */
+.notes-intro {
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 520px;
+  margin: -1.8rem 0 2.4rem;
+}
+.note {
+  padding: 2rem 0;
+  border-top: 1px solid var(--rule);
+}
+.note:first-of-type { border-top: none; }
+.note-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+.note-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 0.7rem;
+}
+.note-body p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 0.8rem;
+}
+.note-body p:last-child { margin-bottom: 0; }
+.note-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.9rem; }
+.note-tags span {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(42,92,69,0.3);
+  padding: 0.2rem 0.6rem;
+}
+
+/* ── Contact (dark bookend: the page's back cover, mirroring the hero) ── */
+#contact { border-bottom: none; background: var(--ink); color: var(--bg); }
+#contact .section-label { color: var(--bg); }
+#contact .section-label::before,
+#contact .section-label::after { background: var(--accent-light); }
+/* On the ink bookend, the box goes sage with ink text so it stays legible. */
+#contact .section-label > span { background: var(--accent-light); color: var(--ink); }
+.contact-headline {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+}
+.contact-intro { color: var(--muted); max-width: 480px; margin-bottom: 2rem; }
+.contact-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+.contact-links a {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 2px;
+  transition: border-color 0.2s;
+}
+.contact-links a:hover { border-color: var(--ink); }
+/* Copy-email: a text control that matches the contact links exactly. */
+.contact-copy {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--rule);
+  padding: 0 0 2px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.contact-copy:hover { border-color: var(--ink); }
+.contact-copy.copied { color: var(--accent); border-color: var(--accent); }
+/* Invert the contact controls onto the ink bookend. */
+#contact .contact-intro { color: rgba(247,245,240,0.72); }
+#contact .contact-links a,
+#contact .contact-copy { color: var(--bg); border-bottom-color: rgba(247,245,240,0.3); }
+#contact .contact-links a:hover,
+#contact .contact-copy:hover { border-bottom-color: var(--bg); }
+#contact .contact-copy.copied { color: var(--accent-light); border-bottom-color: var(--accent-light); }
+
+/* ── Footer ── */
+footer { padding: 2rem 0; border-top: 1px solid var(--rule); }
+footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.footer-link {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.footer-link:hover { color: var(--ink); border-color: var(--ink); }
+/* Footer rides the same ink surface as Contact, closing the bookend. */
+footer { background: var(--ink); border-top-color: rgba(247,245,240,0.14); }
+footer .container { color: rgba(247,245,240,0.6); }
+#contact + footer .footer-link { color: rgba(247,245,240,0.6); border-bottom-color: rgba(247,245,240,0.3); }
+#contact + footer .footer-link:hover { color: var(--bg); border-bottom-color: var(--bg); }
+
+/* ── Fade-in (progressive enhancement: content only hides once JS is present) ── */
+.js .fade-in {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.js .fade-in.visible { opacity: 1; transform: none; }
+
+/* Supporting: each section's forest rule draws left-to-right as the entry scrolls in. */
+.js .section-label::before,
+.js .section-label::after {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+}
+.js .fade-in.visible .section-label::before,
+.js .fade-in.visible .section-label::after { transform: scaleX(1); }
+
+/* Focal moment: the hero inks itself in, line by line, once on load. */
+@keyframes ink-in {
+  from { opacity: 0; transform: translateY(0.4em); filter: blur(7px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.js #hero .hl { display: inline-block; opacity: 0; animation: ink-in 0.72s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.js #hero h1 span:nth-of-type(1) { animation-delay: 0.05s; }
+.js #hero h1 span:nth-of-type(2) { animation-delay: 0.14s; }
+.js #hero h1 em.hl { animation-delay: 0.23s; }
+.js #hero .hero-sub  { opacity: 0; animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both; }
+.js #hero .hero-cta  { opacity: 0; animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both; }
+.js #hero .hero-spec { opacity: 0; animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.54s both; }
+
+/* Supporting: lightbox image arrives with a soft focus-in, not a hard cut. */
+.lightbox img {
+  opacity: 0;
+  transform: scale(0.985);
+  transition: opacity 0.28s ease, transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lightbox.open img { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .fade-in { opacity: 1; transform: none; transition: none; }
+  .project-shot .shot-link img { transition: none; }
+  .project-shot:hover .shot-link img { transform: none; }
+  .js .section-label::before,
+  .js .section-label::after { transform: scaleX(1); transition: none; }
+  .js #hero .hl,
+  .js #hero .hero-sub,
+  .js #hero .hero-cta,
+  .js #hero .hero-spec { opacity: 1; transform: none; filter: none; animation: none; }
+  .lightbox img { opacity: 1; transform: none; transition: opacity 0.2s ease; }
+}
+
+/* ── Index cards (index.html) ─────────────────────────────────────────────
+   A card is the only thing most readers see, so it must carry a measurement:
+   .card-fig is not decoration. The shape rule lives in CLAUDE.md. */
+.card {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 0 1.5rem;
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--rule);
+  align-items: start;
+}
+.card:first-of-type { border-top: none; }
+.card-num { font-size: 11px; color: var(--muted); padding-top: 5px; }
+.card-title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+.card-title a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.card-title a:hover { border-bottom-color: var(--ink); }
+.status {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(42,92,69,0.35);
+  border-radius: 99px;
+  padding: 0.1rem 0.45rem;
+  vertical-align: 0.18em;
+  white-space: nowrap;
+}
+.card-line { font-size: 13px; line-height: 1.7; margin-bottom: 0.35rem; }
+.card-fig {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.6rem;
+}
+.card .project-links { margin-top: 0.7rem; }
+
+/* Leads that introduce a section or a page, one paragraph, never a wall. */
+.section-lead {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 54ch;
+  margin-bottom: 2rem;
+}
+
+/* Experience on the index is one line per role; the bullets are in the resume. */
+.exp-line { font-size: 13px; line-height: 1.75; color: var(--muted); margin-top: 0.5rem; }
+.exp-more { font-size: 11px; color: var(--muted); margin-top: 1.5rem; }
+
+/* The log index: titles only. They carry the range on their own. */
+.log-index { list-style: none; margin: 0 0 1.4rem; }
+.log-index li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.2rem;
+  align-items: baseline;
+  padding: 0.65rem 0;
+  border-top: 1px solid var(--rule);
+}
+.log-index li:first-child { border-top: none; }
+.log-index a {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+}
+.log-index a:hover { border-bottom-color: var(--ink); }
+.log-project {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.log-more a { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+@media (max-width: 560px) {
+  .card { grid-template-columns: 1fr; }
+  .card-num { display: none; }
+  .log-index li { flex-direction: column; gap: 0.15rem; }
+}
