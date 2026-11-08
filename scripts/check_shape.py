@@ -11,6 +11,7 @@ Rules, all of them from CLAUDE.md:
   index.html  13 cards, each one line of 12 to 24 words with at least one measured figure
   notes.html  13 field logs, each 2 paragraphs and 3 tags, no project twice in a row
   all pages   every tag closed, every internal anchor resolving, no em or en dashes
+              (experience.html has no counted shape; it is checked for those three)
 """
 import html
 import io
@@ -20,7 +21,7 @@ import sys
 from html.parser import HTMLParser
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGES = ("index.html", "work.html", "notes.html")
+PAGES = ("index.html", "work.html", "notes.html", "experience.html")
 VOID = {"img", "br", "hr", "meta", "link", "input", "source", "path", "circle", "rect", "use"}
 
 fail = []
@@ -160,7 +161,7 @@ if "notes.html" in src:
 
 # ---- every internal anchor resolves ----
 for page, body in src.items():
-    for m in re.finditer(r'href="(index|work|notes)\.html#([a-z0-9-]+)"', body):
+    for m in re.finditer(r'href="(index|work|notes|experience)\.html#([a-z0-9-]+)"', body):
         target = "%s.html" % m.group(1)
         if target not in src:
             bad(page, "link to missing page %s" % target)
@@ -173,4 +174,4 @@ if fail:
         print("  " + f)
     sys.exit(1)
 
-print("OK: 8 entries, 13 cards, 13 logs, every anchor resolving, no stray dashes")
+print("OK: 4 pages, 8 entries, 13 cards, 13 logs, every anchor resolving, no stray dashes")

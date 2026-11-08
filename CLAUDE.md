@@ -7,15 +7,23 @@ Personal portfolio site.
 | File | What it holds |
 | --- | --- |
 | `README.md` | What it is and how to run it |
-| `index.html` | The way in: the hero's claim, a compressed about and experience, 13 project cards, the 13 field log titles, contact. About 1,100 words. |
+| `index.html` | The way in: the hero's claim, a compressed about and experience, 13 project cards, the 13 field log titles, contact. About 1,050 words. |
+| `experience.html` | Both roles in full, with the bullets, what the research turned into, and education. |
 | `work.html` | The 8 full project entries (lead, four points, gallery, tags) and the 5 compact "Also" entries. |
 | `notes.html` | The 13 field logs in full. |
 | `styles.css` | All CSS for all three pages. **One copy on purpose**: three inline copies drift, and drift is what causes wrong work. |
 | `site.js` | All JS for all three pages: the reveal, the nav drawer, the lightbox, the scroll spy, the copy button. Same reason. |
 | `docs/superpowers/specs/` | The design of a change, written before building it. The three-page split is `2026-11-07-three-page-split-design.md`. |
 
-Still no build step and no package manager. Three hand-authored pages, one stylesheet, one
+Still no build step and no package manager. Four hand-authored pages, one stylesheet, one
 script, served as files.
+
+**A section lead must add a fact, not describe the page.** Three of them were cut on
+2026-11-07 for saying things like "every figure counted in its own repository rather than
+copied from a README": that is methodology talk about the site instead of information about
+the work, and it answers an objection no reader raised. If a lead only restates the heading or
+the format below it, delete it. The `humanizer` skill is the check for this; run prose through
+it before committing.
 
 The vault folder is `Projects/Portfolio/index.md` (decisions, gotchas, current state of the site).
 

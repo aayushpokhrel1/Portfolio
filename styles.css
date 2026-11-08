@@ -875,3 +875,22 @@ footer .container { color: rgba(247,245,240,0.6); }
   .card-num { display: none; }
   .log-index li { flex-direction: column; gap: 0.15rem; }
 }
+
+/* ── Experience page (experience.html) ───────────────────────────────────── */
+.exp-body { font-size: 13px; line-height: 1.8; color: var(--muted); margin: 0.6rem 0 0.9rem; }
+.exp-after {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
+}
+.exp-after-label {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
