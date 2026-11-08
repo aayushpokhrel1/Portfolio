@@ -28,12 +28,12 @@ Measured before the change:
 **The landing page's job is to answer "what is he about", not "what has he built".** That is
 Aayush's own answer to what a reader with 30 seconds should walk away knowing. The projects
 are evidence for that claim, not a catalogue to be impressed by. This reframing is the reason
-an index page does not read as thin: a card is a receipt for a claim rather than a tile in a
-grid.
+an index page does not read as thin: every card has to carry evidence for the claim, which is
+also why every card carries a measured figure.
 
 The claim itself, in substance: an engineer who measures his own claims and reports what he
-finds, including when the finding kills the work. The receipts already exist and are already
-written, which is why the claim can be shown rather than asserted in an adjective:
+finds, including when the finding kills the work. That evidence is already written down, which
+is why the claim can be shown rather than asserted in an adjective:
 
 - a working model deleted because it was beating the wrong baseline, said so in the entry
 - eight evaluation terms A/B tested, four shipped, three plausible ones recorded as failures
