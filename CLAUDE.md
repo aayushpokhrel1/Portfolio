@@ -8,7 +8,7 @@ Personal portfolio site.
 | --- | --- |
 | `README.md` | What it is and how to run it |
 | `index.html` | The way in: the hero's claim, a compressed about and experience, 13 project cards, the 13 field log titles, contact. About 1,050 words. |
-| `experience.html` | Both roles in full, with the bullets, what the research turned into, and education. |
+| `experience.html` | All five roles in full with their bullets, what the UDRI research turned into, and education including coursework. |
 | `work.html` | The 8 full project entries (lead, four points, gallery, tags) and the 5 compact "Also" entries. |
 | `notes.html` | The 13 field logs in full. |
 | `styles.css` | All CSS for all three pages. **One copy on purpose**: three inline copies drift, and drift is what causes wrong work. |
@@ -26,6 +26,14 @@ the format below it, delete it. The `humanizer` skill is the check for this; run
 it before committing.
 
 The vault folder is `Projects/Portfolio/index.md` (decisions, gotchas, current state of the site).
+
+**The experience and education copy comes from the candidate profile in
+`dev/Projects/job-search/CLAUDE.md`**, which is the fullest record of the roles, dates,
+employers and coursework. Read it before editing `experience.html`; the resume PDF is the
+abridged version of it, and this repo holds no copy of either on purpose. **Three things in
+that profile stay out of the public site**: the phone number, the GPA, and per-course grades.
+It also holds internal job-search judgements (growth areas, honesty gates, employment status)
+that are decision-making notes, not site copy.
 
 ## Writing a project entry
 

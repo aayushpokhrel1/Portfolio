@@ -38,7 +38,7 @@ Deployment
 
 Project structure
 - index.html: the landing page. The hero's claim, a compressed about and experience, 13 project cards, the 13 field log titles, contact
-- experience.html: both roles in full, with the bullets, what the research turned into, and education
+- experience.html: all five roles in full, what the UDRI research turned into, and education
 - work.html: the 8 full project entries and the 5 compact "Also" entries
 - notes.html: the 13 field logs in full
 - styles.css, site.js: all CSS and all JS, shared by the three pages
