@@ -9,7 +9,7 @@ of a paragraph asking you to count by eye. Run it after editing any page:
 Rules, all of them from CLAUDE.md:
   work.html   8 entries, each a 33 to 48 word lead, exactly 4 points, 6 tags
   index.html  13 cards, each one line of 12 to 24 words with at least one measured figure
-  notes.html  13 field logs, each 2 paragraphs and 3 tags, no project twice in a row
+  notes.html  14 field logs, each 2 paragraphs and 3 tags, no project twice in a row
   all pages   every tag closed, every internal anchor resolving, no em or en dashes
               (experience.html has no counted shape; it is checked for those three)
   the docs    README.md and CLAUDE.md may not state a page count that is not the real one
@@ -134,15 +134,15 @@ if "index.html" in src:
         if not text(fig).strip():
             bad("index.html", "%s: no measured figure, which is what a card is for" % name)
     rows = len(re.findall(r'class="log-project"', i))
-    if rows != 13:
-        bad("index.html", "expected 13 field log titles, found %d" % rows)
+    if rows != 14:
+        bad("index.html", "expected 14 field log titles, found %d" % rows)
 
-# ---- notes.html: 13 logs, 2 paragraphs, 3 tags, no project twice in a row ----
+# ---- notes.html: 14 logs, 2 paragraphs, 3 tags, no project twice in a row ----
 if "notes.html" in src:
     n = src["notes.html"]
     logs = re.findall(r'<article class="note" id="(.*?)">(.*?)</article>', n, re.S)
-    if len(logs) != 13:
-        bad("notes.html", "expected 13 field logs, found %d" % len(logs))
+    if len(logs) != 14:
+        bad("notes.html", "expected 14 field logs, found %d" % len(logs))
     projects = []
     for slug, body in logs:
         meta = re.search(r"<span>Field log · (.*?)</span>", body)
@@ -198,4 +198,4 @@ for page in PAGES:
     for t in ("script", "style"):
         stripped = re.sub("<%s[^>]*>.*?</%s>" % (t, t), "", stripped, flags=re.S)
     print("  %-17s %5d words" % (page, len(text(re.sub(r"<[^>]+>", " ", stripped)).split())))
-print("OK: 4 pages, 8 entries, 13 cards, 13 logs, every anchor resolving, no stray dashes")
+print("OK: 4 pages, 8 entries, 13 cards, 14 logs, every anchor resolving, no stray dashes")

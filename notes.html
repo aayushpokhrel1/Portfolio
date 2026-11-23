@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Field logs · Aayush Pokhrel</title>
-  <meta name="description" content="Thirteen field logs by Aayush Pokhrel: a retired model that beat the wrong baseline, a view with none of its table's row-level security, a benchmark that scored its own failures as its best result, and more."/>
+  <meta name="description" content="Fourteen field logs by Aayush Pokhrel: a retired model that beat the wrong baseline, a view with none of its table's row-level security, a benchmark that scored its own failures as its best result, and more."/>
   <link rel="canonical" href="https://aayushpokhrel1.github.io/Portfolio/notes.html"/>
 
   <!-- Icons & browser chrome -->
@@ -15,7 +15,7 @@
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://aayushpokhrel1.github.io/Portfolio/notes.html"/>
   <meta property="og:title" content="Field logs · Aayush Pokhrel"/>
-  <meta property="og:description" content="Thirteen field logs by Aayush Pokhrel: a retired model that beat the wrong baseline, a view with none of its table's row-level security, a benchmark that scored its own failures as its best result, and more."/>
+  <meta property="og:description" content="Fourteen field logs by Aayush Pokhrel: a retired model that beat the wrong baseline, a view with none of its table's row-level security, a benchmark that scored its own failures as its best result, and more."/>
   <meta property="og:image" content="https://aayushpokhrel1.github.io/Portfolio/assets/og-image.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
@@ -25,7 +25,7 @@
   <!-- Twitter / X card -->
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Field logs · Aayush Pokhrel"/>
-  <meta name="twitter:description" content="Thirteen field logs by Aayush Pokhrel: a retired model that beat the wrong baseline, a view with none of its table's row-level security, a benchmark that scored its own failures as its best result, and more."/>
+  <meta name="twitter:description" content="Fourteen field logs by Aayush Pokhrel: a retired model that beat the wrong baseline, a view with none of its table's row-level security, a benchmark that scored its own failures as its best result, and more."/>
   <meta name="twitter:image" content="https://aayushpokhrel1.github.io/Portfolio/assets/og-image.png"/>
 
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -124,7 +124,7 @@
       </article>
       <article class="note" id="the-view-had-none-of-the">
         <div class="note-meta">
-          <span>Field log · Family Recipes</span>
+          <span>Field log · Enamel Vault</span>
         </div>
         <h3 class="note-title">The view had none of the security its table had</h3>
         <div class="note-body">
@@ -243,7 +243,7 @@
       </article>
       <article class="note" id="deleting-a-person-and-deleting-their">
         <div class="note-meta">
-          <span>Field log · Family Recipes</span>
+          <span>Field log · Enamel Vault</span>
         </div>
         <h3 class="note-title">Deleting a person and deleting their record are two operations</h3>
         <div class="note-body">
@@ -304,7 +304,7 @@
       </article>
       <article class="note" id="an-invite-that-outlived-the-person">
         <div class="note-meta">
-          <span>Field log · Family Recipes</span>
+          <span>Field log · Enamel Vault</span>
         </div>
         <h3 class="note-title">An invite that outlived the person who sent it</h3>
         <div class="note-body">
@@ -395,7 +395,7 @@
       </article>
       <article class="note" id="three-ways-a-page-lied-while">
         <div class="note-meta">
-          <span>Field log · Family Recipes</span>
+          <span>Field log · Enamel Vault</span>
         </div>
         <h3 class="note-title">Three ways a page lied while 873 tests passed</h3>
         <div class="note-body">
@@ -488,6 +488,39 @@
         </div>
         <div class="note-tags">
           <span>Claude API</span><span>Vision</span><span>Human-in-the-loop</span>
+        </div>
+      </article>
+      <article class="note" id="moving-the-repository-stopped-every-deploy">
+        <div class="note-meta">
+          <span>Field log · Enamel Vault</span>
+        </div>
+        <h3 class="note-title">Moving the repository stopped every deploy</h3>
+        <div class="note-body">
+          <p>
+            Forming Enamel Vault LLC meant moving the private repository from my own GitHub
+            account to the company's organisation. GitHub kept the repository id, and
+            Cloudflare's Workers Builds tracks a repository by id, so I expected nothing to
+            change. Every push after that passed CI and built nothing. The installation of
+            Cloudflare's GitHub App that sends the build webhooks belongs to an account, not
+            to a repository, and the repository had moved out of it. The site never went
+            down, because the old Worker kept answering 200. Production sat five commits
+            behind, and the only alarm was a CI job I had written weeks earlier, which asks
+            the live Worker which commit it was built from and fails when that is not the
+            commit just pushed.
+          </p>
+          <p>
+            Installing the app on the organisation was not enough. Reconnecting the
+            repository in the Cloudflare dashboard fixed it, and also wiped the build
+            configuration, including the two environment variables the frontend reads at
+            build time. Without them the next deploy would have served a page that throws on
+            load. I read the config out through the API before reconnecting and diffed it
+            afterwards, which is how I knew what to restore. The lesson I kept: a green
+            build is not a deploy, and the check that matters compares what is live with what
+            was pushed.
+          </p>
+        </div>
+        <div class="note-tags">
+          <span>GitHub Apps</span><span>Cloudflare Workers</span><span>CI</span>
         </div>
       </article>
     </div>

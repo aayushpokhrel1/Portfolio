@@ -7,10 +7,10 @@ Personal portfolio site.
 | File | What it holds |
 | --- | --- |
 | `README.md` | What it is and how to run it |
-| `index.html` | The way in: the hero's claim, a compressed about and experience, 13 project cards, the 13 field log titles, contact. |
+| `index.html` | The way in: the hero's claim, a compressed about and experience, 13 project cards, the 14 field log titles, contact. |
 | `experience.html` | All five roles in full with their bullets, what the UDRI research turned into, and education including coursework. |
 | `work.html` | The 8 full project entries (lead, four points, gallery, tags) and the 5 compact "Also" entries. |
-| `notes.html` | The 13 field logs in full. |
+| `notes.html` | The 14 field logs in full. |
 | `styles.css` | All CSS for all four pages. **One copy on purpose**: a copy per page drifts, and drift is what causes wrong work. |
 | `site.js` | All JS for all four pages: the reveal, the nav drawer, the lightbox, the scroll spy, the copy button. Same reason. |
 | `docs/superpowers/specs/` | The design of a change, written before building it. The three-page split is `2026-11-07-three-page-split-design.md`. |
