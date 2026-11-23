@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Projects · Aayush Pokhrel</title>
-  <meta name="description" content="Thirteen projects by Aayush Pokhrel, with measured figures from each repository: Enamel Vault, Playstat, Budgerr, a from-scratch C++ chess engine, SEC 10-K RAG, three DNA computing papers, and more."/>
+  <meta name="description" content="Thirteen projects by Aayush Pokhrel, with measured figures from each repository: Enamel Vault (run as Enamel Vault LLC), Playstat, Budgerr, a from-scratch C++ chess engine, SEC 10-K RAG, three DNA computing papers, and more."/>
   <link rel="canonical" href="https://aayushpokhrel1.github.io/Portfolio/work.html"/>
 
   <!-- Icons & browser chrome -->
@@ -15,7 +15,7 @@
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://aayushpokhrel1.github.io/Portfolio/work.html"/>
   <meta property="og:title" content="Projects · Aayush Pokhrel"/>
-  <meta property="og:description" content="Thirteen projects by Aayush Pokhrel, with measured figures from each repository: Enamel Vault, Playstat, Budgerr, a from-scratch C++ chess engine, SEC 10-K RAG, three DNA computing papers, and more."/>
+  <meta property="og:description" content="Thirteen projects by Aayush Pokhrel, with measured figures from each repository: Enamel Vault (run as Enamel Vault LLC), Playstat, Budgerr, a from-scratch C++ chess engine, SEC 10-K RAG, three DNA computing papers, and more."/>
   <meta property="og:image" content="https://aayushpokhrel1.github.io/Portfolio/assets/og-image.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
@@ -25,7 +25,7 @@
   <!-- Twitter / X card -->
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Projects · Aayush Pokhrel"/>
-  <meta name="twitter:description" content="Thirteen projects by Aayush Pokhrel, with measured figures from each repository: Enamel Vault, Playstat, Budgerr, a from-scratch C++ chess engine, SEC 10-K RAG, three DNA computing papers, and more."/>
+  <meta name="twitter:description" content="Thirteen projects by Aayush Pokhrel, with measured figures from each repository: Enamel Vault (run as Enamel Vault LLC), Playstat, Budgerr, a from-scratch C++ chess engine, SEC 10-K RAG, three DNA computing papers, and more."/>
   <meta name="twitter:image" content="https://aayushpokhrel1.github.io/Portfolio/assets/og-image.png"/>
 
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -90,8 +90,97 @@
         <a href="notes.html">The field logs</a> are what I got wrong in these.
       </p>
 
-      <div class="project" id="ai-inventory-management-system">
+      <div class="project" id="enamel-vault-recipes-for-families-and">
         <span class="project-num">01</span>
+        <div>
+          <h3 class="project-title">Enamel Vault: Recipes for Families and Kitchens</h3>
+          <div class="project-gallery">
+            <figure class="project-shot">
+              <a class="shot-link" href="assets/04-FamilyRecipes.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/04-FamilyRecipes.png" alt="The Enamel Vault landing page headlined 'A family's recipes, kept properly', offering a family vault and a professional-kitchen version, above cards describing private visibility, recipe provenance, photo and voice entry, and cook mode." loading="lazy" decoding="async"/>
+              </a>
+              <figcaption>The Enamel Vault, two ways in</figcaption>
+            </figure>
+            <figure class="project-shot">
+              <a class="shot-link" href="assets/ev-family-recipe.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/ev-family-recipe.png" alt="A family recipe in the Enamel Vault app, with its ingredients and steps." loading="lazy" decoding="async" width="1280" height="860"/>
+              </a>
+              <figcaption>A family recipe</figcaption>
+            </figure>
+            <figure class="project-shot">
+              <a class="shot-link" href="assets/ev-family-cook.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/ev-family-cook.png" alt="Cook Mode showing one recipe step at a time in large text." loading="lazy" decoding="async" width="1280" height="860"/>
+              </a>
+              <figcaption>Cook Mode, one step at a time</figcaption>
+            </figure>
+            <figure class="project-shot">
+              <a class="shot-link" href="assets/ev-family-grocery.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/ev-family-grocery.png" alt="The week's grocery list grouped by supermarket aisle, each line naming the recipe it is for." loading="lazy" decoding="async" width="1130" height="700"/>
+              </a>
+              <figcaption>The week's list, by aisle</figcaption>
+            </figure>
+            <figure class="project-shot">
+              <a class="shot-link" href="assets/ev-kitchen-dishes.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/ev-kitchen-dishes.png" alt="The kitchen app's dish list, each dish marked in development, on trial, or on the menu." loading="lazy" decoding="async" width="1280" height="860"/>
+              </a>
+              <figcaption>A kitchen's dishes, by stage</figcaption>
+            </figure>
+            <figure class="project-shot">
+              <a class="shot-link" href="assets/ev-kitchen-dish.png" target="_blank" rel="noopener noreferrer">
+                <img src="assets/ev-kitchen-dish.png" alt="One kitchen dish: the version the sites are cooking, and its history." loading="lazy" decoding="async" width="1280" height="860"/>
+              </a>
+              <figcaption>One dish and its signed-off version</figcaption>
+            </figure>
+          </div>
+          <p class="project-desc">
+            A private recipe vault for families and a dish sign-off app for professional
+            kitchens, run by my company, Enamel Vault LLC, from one codebase with four clients.
+            React, React Native and TypeScript over Supabase on one Cloudflare Worker: about 60k
+            lines, 1,723 unit tests, 72 Postgres migrations.
+          </p>
+          <ul class="project-points">
+            <li>
+              <strong>The access rules live in the database.</strong> Row-level security
+              enforces a three-way visibility model (private, family, public), so a client that
+              skipped the API layer entirely still could not read another family's recipes.
+            </li>
+            <li>
+              <strong>The model drafts, a person saves.</strong> One provider-agnostic
+              extraction service sits behind five front doors (paste, a URL, a photo of a
+              handwritten card, voice, freeform writing) and returns a reviewable draft into the
+              same form the manual path uses. It never writes.
+            </li>
+            <li>
+              <strong>Going public is what costs the work.</strong> Potluck, an opt-in feed
+              of other households' recipes, is why there is a report queue with takedown and
+              suspension, a moderator console on its own host whose service-role backend
+              re-checks permission server-side rather than trusting a hidden nav link, terms
+              and privacy pages, and SEO rendered in the Worker because crawlers never run an
+              SPA.
+            </li>
+            <li>
+              <strong>A second product, and a phone client.</strong> A kitchen app (about 6.4k
+              lines, live on its own subdomain) walks a dish from development to a site trial to
+              the group menu, and an Expo client (about 2.2k lines, not yet run on a real phone)
+              adds offline recipes and timers that ring while the phone is locked. A seal test fails the build if either
+              product reaches into the other's data.
+            </li>
+          </ul>
+          <div class="project-tags">
+            <span>React</span><span>React Native</span><span>TypeScript</span>
+            <span>Supabase</span><span>Row-Level Security</span><span>Cloudflare Workers</span>
+          </div>
+          <div class="project-links">
+            <a href="https://enamelvault.com" target="_blank" rel="noopener noreferrer">Live site</a>
+            <a href="https://recipes.enamelvault.com" target="_blank" rel="noopener noreferrer">Open the app</a>
+            <a href="https://enamelvault.com/professional" target="_blank" rel="noopener noreferrer">The kitchen app</a>
+            <a href="https://github.com/enamelvault/enamelvault-showcase" target="_blank" rel="noopener noreferrer">View the showcase</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project" id="ai-inventory-management-system">
+        <span class="project-num">02</span>
         <div>
           <h3 class="project-title">AI Inventory Management System</h3>
           <div class="project-gallery">
@@ -147,7 +236,7 @@
       </div>
 
       <div class="project" id="playstat-market-ranked-parlay-builder">
-        <span class="project-num">02</span>
+        <span class="project-num">03</span>
         <div>
           <h3 class="project-title">Playstat: Market-Ranked Parlay Builder</h3>
           <div class="project-gallery">
@@ -205,7 +294,7 @@
       </div>
 
       <div class="project" id="budgerr">
-        <span class="project-num">03</span>
+        <span class="project-num">04</span>
         <div>
           <h3 class="project-title">Budgerr</h3>
           <div class="project-gallery">
@@ -254,65 +343,6 @@
           </div>
           <div class="project-links">
             <a href="https://github.com/aayushpokhrel1/Budgerr" target="_blank" rel="noopener noreferrer">View code</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project" id="enamel-vault-recipes-for-families-and">
-        <span class="project-num">04</span>
-        <div>
-          <h3 class="project-title">Enamel Vault: Recipes for Families and Kitchens</h3>
-          <div class="project-gallery">
-            <figure class="project-shot">
-              <a class="shot-link" href="assets/04-FamilyRecipes.png" target="_blank" rel="noopener noreferrer">
-                <img src="assets/04-FamilyRecipes.png" alt="The Enamel Vault landing page headlined 'A family's recipes, kept properly', offering a family vault and a professional-kitchen version, above cards describing private visibility, recipe provenance, photo and voice entry, and cook mode." loading="lazy" decoding="async"/>
-              </a>
-              <figcaption>The Enamel Vault, two ways in</figcaption>
-            </figure>
-          </div>
-          <p class="project-desc">
-            A private recipe vault for families and a dish sign-off app for professional
-            kitchens, on one codebase and four clients, live in production and in daily use.
-            React, React Native and TypeScript over Supabase, served by one Cloudflare Worker:
-            about 54.9k lines, 1,638 tests, 67 Postgres migrations.
-          </p>
-          <ul class="project-points">
-            <li>
-              <strong>The access rules live in the database.</strong> Row-level security
-              enforces a three-way visibility model (private, family, public), so a client that
-              skipped the API layer entirely still could not read another family's recipes.
-            </li>
-            <li>
-              <strong>The model drafts, a person saves.</strong> One provider-agnostic
-              extraction service sits behind five front doors (paste, a URL, a photo of a
-              handwritten card, voice, freeform writing) and returns a reviewable draft into the
-              same form the manual path uses. It never writes.
-            </li>
-            <li>
-              <strong>Going public is what costs the work.</strong> Potluck, an opt-in feed
-              of other households' recipes, is why there is a report queue with takedown and
-              suspension, a moderator console on its own host whose service-role backend
-              re-checks permission server-side rather than trusting a hidden nav link, terms
-              and privacy pages, and SEO rendered in the Worker because crawlers never run an
-              SPA.
-            </li>
-            <li>
-              <strong>A second product, and a phone client.</strong> A kitchen app (about 4.8k
-              lines, live on its own subdomain) walks a dish from development to a site trial to
-              the group menu, and an Expo client (about 2.2k lines) adds offline recipes and
-              timers that ring while the phone is locked. A seal test fails the build if either
-              product reaches into the other's data.
-            </li>
-          </ul>
-          <div class="project-tags">
-            <span>React</span><span>React Native</span><span>TypeScript</span>
-            <span>Supabase</span><span>Row-Level Security</span><span>Cloudflare Workers</span>
-          </div>
-          <div class="project-links">
-            <a href="https://enamelvault.com" target="_blank" rel="noopener noreferrer">Live site</a>
-            <a href="https://recipes.enamelvault.com" target="_blank" rel="noopener noreferrer">Open the app</a>
-            <a href="https://enamelvault.com/professional" target="_blank" rel="noopener noreferrer">The kitchen app</a>
-            <a href="https://github.com/enamelvault/enamelvault-showcase" target="_blank" rel="noopener noreferrer">View the showcase</a>
           </div>
         </div>
       </div>
