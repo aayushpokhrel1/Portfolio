@@ -514,9 +514,9 @@
             configuration, including the two environment variables the frontend reads at
             build time. Without them the next deploy would have served a page that throws on
             load. I read the config out through the API before reconnecting and diffed it
-            afterwards, which is how I knew what to restore. The lesson I kept: a green
-            build is not a deploy, and the check that matters compares what is live with what
-            was pushed.
+            afterwards, which is how I knew what to restore. Since then I treat a
+            passing build and a finished deploy as two separate facts, and only a check
+            against the live site can confirm the second one.
           </p>
         </div>
         <div class="note-tags">

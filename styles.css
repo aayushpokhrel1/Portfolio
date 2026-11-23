@@ -829,6 +829,21 @@ footer .container { color: rgba(247,245,240,0.6); }
 }
 .card .project-links { margin-top: 0.7rem; }
 
+/* The featured band is card 01 in its own section after the hero. It keeps the
+   card-title / card-line / card-fig sequence so check_shape.py still counts 13 cards
+   and the project never appears twice on the page. */
+.card-feature { border-top: none; padding-top: 0; }
+.card-feature .card-title { font-size: 1.5rem; }
+.card-feature .card-line { font-size: 14px; }
+.feature-media {
+  display: block;
+  margin: 0 0 1.3rem;
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+.feature-media img { display: block; width: 100%; height: auto; }
+.feature-cta { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 1.1rem; }
+
 /* Leads that introduce a section or a page, one paragraph, never a wall. */
 .section-lead {
   font-size: 13px;
