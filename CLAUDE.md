@@ -8,7 +8,7 @@ Personal portfolio site.
 | --- | --- |
 | `README.md` | What it is and how to run it |
 | `index.html` | The way in: the hero's claim, a compressed about and experience, 13 project cards, the 14 field log titles, contact. |
-| `experience.html` | All five roles in full with their bullets, what the UDRI research turned into, and education including coursework. |
+| `experience.html` | All six roles in full with their bullets, what the UDRI research turned into, and education including coursework. |
 | `work.html` | The 8 full project entries (lead, four points, gallery, tags) and the 5 compact "Also" entries. |
 | `notes.html` | The 14 field logs in full. |
 | `styles.css` | All CSS for all four pages. **One copy on purpose**: a copy per page drifts, and drift is what causes wrong work. |
