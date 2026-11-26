@@ -4,12 +4,17 @@
   --bg: #f7f5f0;
   --bg-2: #efece4;
   --ink: #1a1814;
-  --muted: #726d67;
+  --muted: #6b6660; /* 4.8:1 on --bg-2: #726d67 was 4.3:1 and failed AA on the banded sections */
   --accent: #2a5c45;
   --accent-light: #7cc4a0;
   --rule: #ddd9d2;
   --mono: 'DM Mono', monospace;
   --serif: 'DM Serif Display', Georgia, serif;
+  /* Motion. Entrances and exits use --ease-out; something moving between two places on
+     screen (the lightbox morph) uses --ease-in-out; the drawer uses --ease-drawer. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 html { scroll-behavior: smooth; }
@@ -32,6 +37,16 @@ body {
 }
 
 /* Browser surfaces themed from the palette, not left at engine defaults. */
+/* Links in running prose. Element-level on purpose: every styled link (nav, cards,
+   buttons, contact) sets its own colour and wins; only links nobody styled land here,
+   and they used to render browser-default blue. */
+a {
+  color: var(--ink);
+  text-decoration: underline 1px var(--rule);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s;
+}
+a:hover { text-decoration-color: currentColor; }
 ::selection { background: var(--accent); color: var(--bg); }
 html { caret-color: var(--accent); }
 
@@ -114,8 +129,10 @@ nav .container {
 }
 .nav-links a:hover { color: var(--ink); }
 /* "You are here": the current section's link carries a forest thread. */
-.nav-links a.active { color: var(--ink); }
-.nav-links a.active::after {
+.nav-links a.active,
+.nav-links a[aria-current="page"] { color: var(--ink); }
+.nav-links a.active::after,
+.nav-links a[aria-current="page"]::after {
   content: '';
   position: absolute;
   left: 0; right: 0;
@@ -152,7 +169,7 @@ nav.nav--hero .nav-links a:hover { color: var(--bg); }
   background: transparent;
   border: 1px solid var(--rule);
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  transition: color 0.2s, border-color 0.2s, transform 0.16s var(--ease-out);
 }
 .nav-toggle:hover { color: var(--ink); border-color: var(--ink); }
 nav.nav--hero .nav-toggle { color: var(--bg); border-color: rgba(247,245,240,0.4); }
@@ -168,12 +185,20 @@ nav.nav--hero .nav-toggle:hover { border-color: var(--bg); }
     flex-direction: column;
     gap: 0;
     padding: 0.4rem 0 0.6rem;
-    background: rgba(247,245,240,0.97);
-    backdrop-filter: blur(10px);
+    background: var(--bg); /* opaque: at 0.97 the hero headline read through the links */
     border-bottom: 1px solid var(--rule);
-    display: none;
+    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.16s var(--ease-out), transform 0.16s var(--ease-out), visibility 0s linear 0.16s;
   }
-  nav.menu-open .nav-links { display: flex; }
+  nav.menu-open .nav-links {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.22s var(--ease-drawer), transform 0.22s var(--ease-drawer), visibility 0s;
+  }
   .nav-links li { width: 100%; }
   /* Drawer sits on paper regardless of hero state, so links keep paper-surface colors. */
   nav.nav--hero .nav-links a,
@@ -190,8 +215,10 @@ nav.nav--hero .nav-toggle:hover { border-color: var(--bg); }
   nav.nav--hero .nav-links a:hover,
   .nav-links a:hover { color: var(--ink); }
   /* Drawer rows already carry hairlines; drop the underline tick here. */
-  .nav-links a.active::after { display: none; }
-  .nav-links a.active { color: var(--ink); }
+  .nav-links a.active::after,
+  .nav-links a[aria-current="page"]::after { display: none; }
+  .nav-links a.active,
+  .nav-links a[aria-current="page"] { color: var(--ink); }
 }
 
 /* ── Hero (dark peak) ── */
@@ -223,7 +250,7 @@ h1 em { font-style: italic; color: var(--accent-light); }
 .hero-spec > div { display: flex; flex-direction: column; gap: 0.4rem; }
 .hero-spec dt {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -250,11 +277,20 @@ h1 em { font-style: italic; color: var(--accent-light); }
 #hero .btn:hover { background: var(--bg); color: var(--ink); }
 #hero .btn-ghost { border-color: rgba(247,245,240,0.28); color: rgba(247,245,240,0.72); }
 #hero .btn-ghost:hover { border-color: var(--bg); background: transparent; color: var(--bg); }
+/* One primary action: the work. The other three step back to ghost. */
+#hero .btn-primary { background: var(--bg); border-color: var(--bg); color: var(--ink); }
+#hero .btn-primary:hover { background: var(--accent-light); border-color: var(--accent-light); color: var(--ink); }
 .hero-cta {
   display: flex;
   gap: 1.2rem;
   align-items: center;
   flex-wrap: wrap;
+}
+/* On a phone four buttons wrapped into ragged rows; a 2x2 grid keeps them even. */
+@media (max-width: 580px) {
+  /* stretch, not center: a label that wraps would otherwise leave its row-mate shorter */
+  .hero-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; align-items: stretch; }
+  .hero-cta .btn { display: flex; align-items: center; justify-content: center; text-align: center; padding-inline: 0.6rem; }
 }
 .btn {
   display: inline-block;
@@ -266,8 +302,9 @@ h1 em { font-style: italic; color: var(--accent-light); }
   text-decoration: none;
   border: 1px solid var(--ink);
   color: var(--ink);
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.16s var(--ease-out);
 }
+.btn:active, .nav-toggle:active { transform: scale(0.97); }
 .btn:hover { background: var(--ink); color: var(--bg); }
 .btn-ghost { border-color: var(--rule); color: var(--muted); }
 .btn-ghost:hover { border-color: var(--ink); background: transparent; color: var(--ink); }
@@ -287,6 +324,7 @@ section {
   font-family: var(--mono);
   font-weight: 400;
   font-size: 14px;
+  line-height: 1.2; /* the same whether the label is a page's h1 or a section's h2 */
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--ink);
@@ -332,7 +370,7 @@ h2 {
 .about-text p { color: var(--muted); margin-bottom: 1rem; }
 .skills-group { margin-bottom: 1.4rem; }
 .skills-group-label {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent);
@@ -384,7 +422,7 @@ h2 {
 }
 .exp-bullets { list-style: none; }
 .exp-bullets li {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   line-height: 1.8;
   padding-left: 1.2rem;
@@ -419,7 +457,7 @@ h2 {
   margin-bottom: 0.4rem;
 }
 .project-desc {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   margin-bottom: 0.8rem;
   line-height: 1.8;
@@ -434,7 +472,7 @@ h2 {
 }
 .project-points li {
   position: relative;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   line-height: 1.75;
   padding-left: 1.1rem;
@@ -453,7 +491,7 @@ h2 {
 .project-points strong { color: var(--ink); font-weight: 500; }
 .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .project-tags span {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
@@ -479,13 +517,13 @@ h2 {
 }
 .project-links a:hover { border-color: var(--ink); }
 .project-note {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
 }
 .project-gallery {
-  margin: 0.2rem 0 1.3rem;
+  margin: 1.2rem 0 1.1rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.8rem;
@@ -509,7 +547,7 @@ h2 {
   background: var(--rule);
 }
 .project-shot figcaption {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -599,7 +637,7 @@ h2 {
   font-weight: 400;
 }
 .also-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.75;
   margin: 0.25rem 0 0.7rem;
@@ -609,7 +647,7 @@ h2 {
 /* ── Notes (field log) ── */
 .notes-intro {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
   max-width: 520px;
   margin: -1.8rem 0 2.4rem;
 }
@@ -623,7 +661,7 @@ h2 {
   align-items: baseline;
   gap: 0.85rem;
   flex-wrap: wrap;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
@@ -637,7 +675,7 @@ h2 {
   margin-bottom: 0.7rem;
 }
 .note-body p {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   line-height: 1.8;
   margin-bottom: 0.8rem;
@@ -645,7 +683,7 @@ h2 {
 .note-body p:last-child { margin-bottom: 0; }
 .note-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.9rem; }
 .note-tags span {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
@@ -727,14 +765,15 @@ footer .container {
 /* Footer rides the same ink surface as Contact, closing the bookend. */
 footer { background: var(--ink); border-top-color: rgba(247,245,240,0.14); }
 footer .container { color: rgba(247,245,240,0.6); }
-#contact + footer .footer-link { color: rgba(247,245,240,0.6); border-bottom-color: rgba(247,245,240,0.3); }
-#contact + footer .footer-link:hover { color: var(--bg); border-bottom-color: var(--bg); }
+/* Every footer sits on ink, with or without a #contact before it (the subpages have none). */
+footer .footer-link { color: rgba(247,245,240,0.6); border-bottom-color: rgba(247,245,240,0.3); }
+footer .footer-link:hover { color: var(--bg); border-bottom-color: var(--bg); }
 
 /* ── Fade-in (progressive enhancement: content only hides once JS is present) ── */
 .js .fade-in {
   opacity: 0;
   transform: translateY(14px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
 }
 .js .fade-in.visible { opacity: 1; transform: none; }
 
@@ -743,7 +782,7 @@ footer .container { color: rgba(247,245,240,0.6); }
 .js .section-label::after {
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+  transition: transform 0.55s var(--ease-out) 0.08s;
 }
 .js .fade-in.visible .section-label::before,
 .js .fade-in.visible .section-label::after { transform: scaleX(1); }
@@ -757,21 +796,29 @@ footer .container { color: rgba(247,245,240,0.6); }
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }
 }
-.js #hero .hl { display: inline-block; opacity: 0; animation: ink-in 0.72s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.js #hero .hl { display: inline-block; opacity: 0; animation: ink-in 0.72s var(--ease-out) both; }
 .js #hero h1 span:nth-of-type(1) { animation-delay: 0.05s; }
 .js #hero h1 span:nth-of-type(2) { animation-delay: 0.14s; }
 .js #hero h1 em.hl { animation-delay: 0.23s; }
-.js #hero .hero-sub  { opacity: 0; animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both; }
-.js #hero .hero-cta  { opacity: 0; animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both; }
-.js #hero .hero-spec { opacity: 0; animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.54s both; }
+.js #hero .hero-sub  { opacity: 0; animation: rise-in 0.6s var(--ease-out) 0.34s both; }
+.js #hero .hero-cta  { opacity: 0; animation: rise-in 0.6s var(--ease-out) 0.44s both; }
+.js #hero .hero-spec { opacity: 0; animation: rise-in 0.6s var(--ease-out) 0.54s both; }
 
-/* Supporting: lightbox image arrives with a soft focus-in, not a hard cut. */
+/* Lightbox: with View Transitions (site.js adds .vt) the thumbnail morphs into the image
+   and back, and the backdrop crossfades with the page. Without VT the image fades in. */
+.lightbox.vt img { opacity: 1; transform: none; transition: none; }
+::view-transition-group(lightbox-shot) { animation-duration: 0.34s; animation-timing-function: var(--ease-in-out); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.24s; animation-timing-function: var(--ease-out); }
+/* Swipe-down to close on touch: the image follows the finger 1:1. */
+.lightbox img { touch-action: none; }
+.lightbox.dragging img { transition: none; }
 .lightbox img {
   opacity: 0;
   transform: scale(0.985);
-  transition: opacity 0.28s ease, transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.28s ease, transform 0.32s var(--ease-out);
 }
 .lightbox.open img { opacity: 1; transform: none; }
+@starting-style { .lightbox.open:not(.vt) img { opacity: 0; transform: scale(0.985); } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -785,6 +832,8 @@ footer .container { color: rgba(247,245,240,0.6); }
   .js #hero .hero-cta,
   .js #hero .hero-spec { opacity: 1; transform: none; filter: none; animation: none; }
   .lightbox img { opacity: 1; transform: none; transition: opacity 0.2s ease; }
+  .btn:active, .nav-toggle:active { transform: none; }
+  .nav-links, nav.menu-open .nav-links { transform: none; }
 }
 
 /* ── Index cards (index.html) ─────────────────────────────────────────────
@@ -810,7 +859,7 @@ footer .container { color: rgba(247,245,240,0.6); }
 .card-title a:hover { border-bottom-color: var(--ink); }
 .status {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
@@ -820,9 +869,9 @@ footer .container { color: rgba(247,245,240,0.6); }
   vertical-align: 0.18em;
   white-space: nowrap;
 }
-.card-line { font-size: 13px; line-height: 1.7; margin-bottom: 0.35rem; }
+.card-line { font-size: 14px; line-height: 1.7; margin-bottom: 0.35rem; }
 .card-fig {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   letter-spacing: 0.02em;
   margin-bottom: 0.6rem;
@@ -846,7 +895,7 @@ footer .container { color: rgba(247,245,240,0.6); }
 
 /* Leads that introduce a section or a page, one paragraph, never a wall. */
 .section-lead {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   line-height: 1.8;
   max-width: 54ch;
@@ -854,8 +903,8 @@ footer .container { color: rgba(247,245,240,0.6); }
 }
 
 /* Experience on the index is one line per role; the bullets are in the resume. */
-.exp-line { font-size: 13px; line-height: 1.75; color: var(--muted); margin-top: 0.5rem; }
-.exp-more { font-size: 11px; color: var(--muted); margin-top: 1.5rem; }
+.exp-line { font-size: 14px; line-height: 1.75; color: var(--muted); margin-top: 0.5rem; }
+.exp-more { font-size: 12px; color: var(--muted); margin-top: 1.5rem; }
 
 /* The log index: titles only. They carry the range on their own. */
 .log-index { list-style: none; margin: 0 0 1.4rem; }
@@ -877,7 +926,7 @@ footer .container { color: rgba(247,245,240,0.6); }
 }
 .log-index a:hover { border-bottom-color: var(--ink); }
 .log-project {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
@@ -893,9 +942,9 @@ footer .container { color: rgba(247,245,240,0.6); }
 }
 
 /* ── Experience page (experience.html) ───────────────────────────────────── */
-.exp-body { font-size: 13px; line-height: 1.8; color: var(--muted); margin: 0.6rem 0 0.9rem; }
+.exp-body { font-size: 14px; line-height: 1.8; color: var(--muted); margin: 0.6rem 0 0.9rem; }
 .exp-after {
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.8;
   color: var(--muted);
   margin-top: 1rem;
@@ -904,7 +953,7 @@ footer .container { color: rgba(247,245,240,0.6); }
 }
 .exp-after-label {
   display: block;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
