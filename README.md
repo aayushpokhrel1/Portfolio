@@ -43,6 +43,7 @@ Project structure
 - work.html: the 8 full project entries and the 5 compact "Also" entries
 - notes.html: the 14 field logs in full
 - styles.css, site.js: all CSS and all JS, shared by the four pages
+- DESIGN.md: the visual system (palette, type, components, motion tokens)
 - scripts/check_shape.py: the shape checker; run it after editing a page
 - docs/superpowers/specs/: the design of a change, written before building it
 - assets/: project screenshots, favicon, Open Graph image, and resume PDF (Pokhrel_Aayush_Resume_2026.pdf)
